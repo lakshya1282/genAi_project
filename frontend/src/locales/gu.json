@@ -1,0 +1,22 @@
+{
+  "navbar": {
+    "home": "ઘર",
+    "marketplace": "બજાર",
+    "cart": "કાર્ટ",
+    "account": "ખાતું",
+    "login": "લોગિન",
+    "logout": "લૉગઆઉટ"
+  },
+  "customerSettings": {
+    "title": "ગ્રાહક સેટિંગ્સ",
+    "language": "ભાષા",
+    "logout": "લૉગઆઉટ"
+  },
+  "language": {
+    "title": "ભાષા પસંદગીઓ",
+    "subtitle": "તમારી પસંદીદા ભાષા પસંદ કરો"
+  },
+  "messages": {
+    "languageUpdated": "ભાષા સફળતાપૂર્વક અપડેટ થઈ"
+  }
+}

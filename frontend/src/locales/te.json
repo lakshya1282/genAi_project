@@ -1,0 +1,56 @@
+{
+  "navbar": {
+    "home": "హోమ్",
+    "marketplace": "మార్కెట్ ప్లేస్",
+    "aiAssistant": "AI అసిస్టెంట్",
+    "dashboard": "డ్యాష్‌బోర్డ్",
+    "cart": "కార్ట్",
+    "account": "ఖాతా",
+    "login": "లాగిన్",
+    "register": "రిజిస్టర్",
+    "logout": "లాగౌట్",
+    "notifications": "నోటిఫికేషన్లు"
+  },
+  "customerSettings": {
+    "title": "కస్టమర్ సెట్టింగ్స్",
+    "profile": "ప్రొఫైల్ సెట్టింగ్స్",
+    "orders": "ఆర్డర్లు",
+    "wishlist": "విష్‌లిస్ట్",
+    "coupons": "కూపన్లు",
+    "helpCenter": "హెల్ప్ సెంటర్",
+    "recentlyViewed": "ఇటీవల చూసినవి",
+    "language": "భాష",
+    "accountSettings": "ఖాతా సెట్టింగ్స్",
+    "editProfile": "ప్రొఫైల్ ఎడిట్ చేయండి",
+    "savedAddresses": "సేవ్ చేసిన చిరునామాలు",
+    "logout": "లాగౌట్"
+  },
+  "language": {
+    "title": "భాష ప్రాధాన్యతలు",
+    "subtitle": "మీ ఇష్టమైన భాషను ఎంచుకోండి",
+    "english": "ఇంగ్లీష్",
+    "hindi": "హిందీ",
+    "bengali": "బెంగాలీ",
+    "tamil": "తమిళం",
+    "telugu": "తెలుగు",
+    "gujarati": "గుజరాతీ",
+    "marathi": "మరాఠీ",
+    "kannada": "కన్నడ",
+    "malayalam": "మలయాళం",
+    "odia": "ఒడియా",
+    "punjabi": "పంజాబీ",
+    "assamese": "అస్సామీస్"
+  },
+  "common": {
+    "loading": "లోడ్ అవుతోంది...",
+    "error": "లోపం",
+    "success": "విజయం",
+    "save": "సేవ్",
+    "cancel": "రద్దు",
+    "search": "వెతుకు"
+  },
+  "messages": {
+    "languageUpdated": "భాష విజయవంతంగా అప్‌డేట్ చేయబడింది",
+    "languageUpdateError": "భాషను అప్‌డేట్ చేయడంలో విఫలమైంది"
+  }
+}

@@ -1,0 +1,245 @@
+.ai-assistant {
+  padding: 40px 0;
+  min-height: calc(100vh - 70px);
+}
+
+.ai-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.ai-header h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 16px;
+}
+
+.ai-header p {
+  font-size: 1.1rem;
+  color: #6c757d;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.ai-tabs {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 40px;
+  border-bottom: 2px solid #e9ecef;
+}
+
+.tab {
+  padding: 16px 32px;
+  background: none;
+  border: none;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  color: #6c757d;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-bottom: 3px solid transparent;
+}
+
+.tab:hover {
+  color: #667eea;
+}
+
+.tab.active {
+  color: #667eea;
+  border-bottom-color: #667eea;
+}
+
+.ai-content {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.ai-section {
+  background: white;
+  padding: 40px;
+  border-radius: 16px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+}
+
+.ai-section h3 {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 12px;
+}
+
+.ai-section > p {
+  color: #6c757d;
+  margin-bottom: 32px;
+  font-size: 1.1rem;
+}
+
+.ai-result {
+  margin-top: 32px;
+  padding: 24px;
+  background: #f8f9fa;
+  border-radius: 12px;
+  border: 2px solid #e9ecef;
+}
+
+.ai-result h4 {
+  color: #333;
+  margin-bottom: 16px;
+  font-weight: 600;
+}
+
+.story-result,
+.description-result {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  line-height: 1.7;
+  color: #495057;
+  border-left: 4px solid #667eea;
+  margin-bottom: 16px;
+}
+
+.marketing-results {
+  display: grid;
+  gap: 24px;
+}
+
+.marketing-item {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  border-left: 4px solid #28a745;
+}
+
+.marketing-item h4 {
+  color: #28a745;
+  margin-bottom: 12px;
+  font-size: 1.1rem;
+}
+
+.social-post {
+  background: #e3f2fd;
+  padding: 16px;
+  border-radius: 8px;
+  font-style: italic;
+  color: #1565c0;
+  margin-bottom: 12px;
+}
+
+.product-story {
+  background: #f3e5f5;
+  padding: 16px;
+  border-radius: 8px;
+  color: #4a148c;
+  line-height: 1.6;
+  margin-bottom: 12px;
+}
+
+.target-audience {
+  background: #e8f5e8;
+  padding: 16px;
+  border-radius: 8px;
+  color: #2e7d32;
+  font-weight: 500;
+}
+
+.tags-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.tag {
+  background: #667eea;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.auth-required {
+  text-align: center;
+  padding: 80px 40px;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.auth-required h2 {
+  font-size: 2rem;
+  color: #333;
+  margin-bottom: 16px;
+}
+
+.auth-required p {
+  color: #6c757d;
+  margin-bottom: 32px;
+  font-size: 1.1rem;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .ai-assistant {
+    padding: 20px 0;
+  }
+  
+  .ai-header h1 {
+    font-size: 2rem;
+  }
+  
+  .ai-header p {
+    font-size: 1rem;
+  }
+  
+  .ai-tabs {
+    flex-direction: column;
+    align-items: center;
+    border-bottom: none;
+  }
+  
+  .tab {
+    width: 100%;
+    max-width: 300px;
+    padding: 12px 20px;
+    border-bottom: 2px solid #e9ecef;
+    border-radius: 8px;
+    margin-bottom: 8px;
+  }
+  
+  .tab.active {
+    background: #667eea;
+    color: white;
+    border-bottom-color: #667eea;
+  }
+  
+  .ai-section {
+    padding: 24px 20px;
+  }
+  
+  .ai-section h3 {
+    font-size: 1.5rem;
+  }
+  
+  .marketing-results {
+    gap: 16px;
+  }
+  
+  .marketing-item {
+    padding: 16px;
+  }
+  
+  .auth-required {
+    padding: 60px 20px;
+    margin: 20px;
+  }
+  
+  .auth-required h2 {
+    font-size: 1.5rem;
+  }
+}

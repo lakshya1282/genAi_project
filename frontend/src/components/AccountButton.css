@@ -1,0 +1,216 @@
+.account-button-container {
+  position: relative;
+  display: inline-block;
+}
+
+.account-button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: transparent;
+  border: 2px solid #d4a574;
+  border-radius: 8px;
+  color: #d4a574;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.account-button:hover {
+  background: #d4a574;
+  color: #2c1810;
+  transform: translateY(-1px);
+}
+
+.account-icon {
+  font-size: 1rem;
+}
+
+.account-name {
+  white-space: nowrap;
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dropdown-arrow {
+  font-size: 0.8rem;
+  transition: transform 0.3s ease;
+}
+
+.dropdown-arrow.rotated {
+  transform: rotate(180deg);
+}
+
+.account-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 0.5rem;
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  min-width: 280px;
+  max-width: 320px;
+  z-index: 1000;
+  overflow: hidden;
+}
+
+.dropdown-header {
+  background: linear-gradient(135deg, #d4a574, #b8956a);
+  padding: 1.5rem;
+  color: white;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.user-avatar {
+  width: 50px;
+  height: 50px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+}
+
+.user-details h4 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.user-details p {
+  margin: 0.25rem 0 0 0;
+  font-size: 0.85rem;
+  opacity: 0.9;
+}
+
+.dropdown-menu {
+  padding: 0.5rem 0;
+}
+
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1.5rem;
+  color: #333;
+  text-decoration: none;
+  background: none;
+  border: none;
+  width: 100%;
+  text-align: left;
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.dropdown-item:hover {
+  background: #f8f9fa;
+  color: #d4a574;
+}
+
+.dropdown-item.logout-item {
+  color: #dc3545;
+}
+
+.dropdown-item.logout-item:hover {
+  background: #fff5f5;
+  color: #c82333;
+}
+
+.item-icon {
+  font-size: 1rem;
+  color: #666;
+  transition: color 0.2s ease;
+}
+
+.dropdown-item:hover .item-icon {
+  color: inherit;
+}
+
+.dropdown-divider {
+  height: 1px;
+  background: #e0e0e0;
+  margin: 0.5rem 0;
+}
+
+/* Artisan-specific styles */
+.account-button.artisan-account {
+  border-color: #667eea;
+  color: #667eea;
+}
+
+.account-button.artisan-account:hover {
+  background: #667eea;
+  color: white;
+}
+
+.account-dropdown.artisan-dropdown .dropdown-header {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+}
+
+.artisan-avatar {
+  background: rgba(255, 255, 255, 0.2) !important;
+}
+
+.user-type-badge {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 0.2rem 0.5rem;
+  border-radius: 10px;
+  font-size: 0.7rem;
+  font-weight: 500;
+  margin-top: 0.25rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.account-dropdown.artisan-dropdown .dropdown-item:hover {
+  background: #f0f4ff;
+  color: #667eea;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .account-name {
+    display: none;
+  }
+  
+  .account-dropdown {
+    right: -50px;
+    min-width: 250px;
+  }
+  
+  .dropdown-header {
+    padding: 1rem;
+  }
+  
+  .user-avatar {
+    width: 40px;
+    height: 40px;
+    font-size: 1.2rem;
+  }
+  
+  .user-details h4 {
+    font-size: 1rem;
+  }
+  
+  .user-details p {
+    font-size: 0.8rem;
+  }
+  
+  .dropdown-item {
+    padding: 0.6rem 1rem;
+    font-size: 0.9rem;
+  }
+}

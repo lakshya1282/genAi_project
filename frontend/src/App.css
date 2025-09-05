@@ -1,0 +1,290 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', 'Poppins', sans-serif;
+  background: linear-gradient(45deg, #fef7ed 0%, #fff7ed 50%, #fed7aa 100%);
+  background-attachment: fixed;
+  line-height: 1.6;
+  color: #451a03;
+}
+
+.App {
+  min-height: 100vh;
+}
+
+.main-content {
+  margin-top: 70px;
+  min-height: calc(100vh - 70px);
+}
+
+/* Common styles */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.btn {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-block;
+  text-align: center;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+  color: white;
+  border: 2px solid transparent;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-primary::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  transition: left 0.3s ease;
+  z-index: -1;
+}
+
+.btn-primary:hover::before {
+  left: 0;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(220, 38, 38, 0.4);
+  border-color: #f59e0b;
+}
+
+.btn-secondary {
+  background: #fef3c7;
+  color: #92400e;
+  border: 2px solid #f59e0b;
+  font-weight: 600;
+}
+
+.btn-secondary:hover {
+  background: #fbbf24;
+  border-color: #d97706;
+  color: white;
+  transform: translateY(-2px);
+}
+
+.btn-success {
+  background: linear-gradient(135deg, #059669 0%, #047857 100%);
+  color: white;
+  border: 2px solid transparent;
+}
+
+.btn-success:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(5, 150, 105, 0.4);
+  border-color: #10b981;
+}
+
+.card {
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(220, 38, 38, 0.1);
+  padding: 24px;
+  margin-bottom: 20px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: 1px solid rgba(251, 191, 36, 0.2);
+  backdrop-filter: blur(10px);
+  position: relative;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #dc2626 0%, #f59e0b 50%, #059669 100%);
+  border-radius: 16px 16px 0 0;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(220, 38, 38, 0.2);
+  border-color: rgba(251, 191, 36, 0.4);
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: #495057;
+}
+
+.form-input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid #dee2e6;
+  border-radius: 8px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  transition: border-color 0.3s ease;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #f59e0b;
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.2);
+}
+
+.form-textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.grid {
+  display: grid;
+  gap: 24px;
+}
+
+.grid-2 {
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+.grid-3 {
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+.grid-4 {
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-primary {
+  color: #dc2626;
+  font-weight: 600;
+}
+
+.text-muted {
+  color: #6c757d;
+}
+
+.mb-2 {
+  margin-bottom: 16px;
+}
+
+.mb-3 {
+  margin-bottom: 24px;
+}
+
+.mb-4 {
+  margin-bottom: 32px;
+}
+
+.mt-2 {
+  margin-top: 16px;
+}
+
+.mt-3 {
+  margin-top: 24px;
+}
+
+.mt-4 {
+  margin-top: 32px;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+  font-size: 18px;
+  color: #6c757d;
+}
+
+.error {
+  color: #dc3545;
+  text-align: center;
+  padding: 20px;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .container {
+    padding: 0 16px;
+  }
+  
+  .grid-2,
+  .grid-3,
+  .grid-4 {
+    grid-template-columns: 1fr;
+  }
+  
+  .main-content {
+    margin-top: 60px;
+  }
+}
+
+
+/* Traditional Indian Design Elements */
+.decorative-border {
+  border-image: linear-gradient(90deg, #dc2626 0%, #f59e0b 25%, #059669 50%, #f59e0b 75%, #dc2626 100%) 1;
+  border-width: 3px;
+  border-style: solid;
+}
+
+.mandala-pattern::before {
+  content: '';
+  position: absolute;
+  top: -10px;
+  left: -10px;
+  right: -10px;
+  bottom: -10px;
+  background: 
+    radial-gradient(circle at center, transparent 30%, rgba(220, 38, 38, 0.1) 31%, rgba(220, 38, 38, 0.1) 32%, transparent 33%),
+    radial-gradient(circle at center, transparent 50%, rgba(245, 158, 11, 0.1) 51%, rgba(245, 158, 11, 0.1) 52%, transparent 53%),
+    radial-gradient(circle at center, transparent 70%, rgba(5, 150, 105, 0.1) 71%, rgba(5, 150, 105, 0.1) 72%, transparent 73%);
+  z-index: -2;
+  border-radius: inherit;
+}
+
+.lotus-shadow {
+  filter: drop-shadow(0 0 10px rgba(220, 38, 38, 0.3)) drop-shadow(0 0 20px rgba(245, 158, 11, 0.2));
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #dc2626 0%, #f59e0b 100%);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #b91c1c 0%, #d97706 100%);
+}

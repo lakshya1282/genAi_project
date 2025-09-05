@@ -1,0 +1,270 @@
+/* QuantitySelector.css */
+.quantity-selector {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-family: inherit;
+}
+
+.quantity-controls {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  overflow: hidden;
+  background: white;
+}
+
+.quantity-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f8f9fa;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: #495057;
+  font-size: 12px;
+}
+
+.quantity-btn:hover:not(:disabled) {
+  background: #e9ecef;
+  color: #007bff;
+}
+
+.quantity-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+  background: #f8f9fa;
+}
+
+.quantity-input {
+  border: none;
+  text-align: center;
+  font-weight: 600;
+  color: #333;
+  background: white;
+  outline: none;
+  -moz-appearance: textfield;
+}
+
+.quantity-input::-webkit-outer-spin-button,
+.quantity-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.stock-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 12px;
+}
+
+.stock-status {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 500;
+}
+
+.stock-status.stock-available {
+  color: #28a745;
+}
+
+.stock-status.stock-low {
+  color: #ffc107;
+}
+
+.stock-status.stock-out {
+  color: #dc3545;
+}
+
+.loading-icon {
+  animation: spin 1s linear infinite;
+}
+
+.warning-icon {
+  color: #ffc107;
+}
+
+.reservation-info {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+  color: #6c757d;
+  margin-top: 2px;
+}
+
+.reservation-icon {
+  color: #17a2b8;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.stock-in-stock {
+  color: #28a745;
+}
+
+.stock-low-stock {
+  color: #ffc107;
+}
+
+.stock-out-of-stock {
+  color: #dc3545;
+}
+
+.stock-unavailable {
+  color: #6c757d;
+}
+
+.max-quantity-info {
+  color: #6c757d;
+  font-size: 11px;
+}
+
+/* Size variations */
+.quantity-selector.small .quantity-btn {
+  width: 28px;
+  height: 28px;
+}
+
+.quantity-selector.small .quantity-input {
+  width: 40px;
+  height: 28px;
+  font-size: 13px;
+}
+
+.quantity-selector.medium .quantity-btn {
+  width: 36px;
+  height: 36px;
+}
+
+.quantity-selector.medium .quantity-input {
+  width: 50px;
+  height: 36px;
+  font-size: 14px;
+}
+
+.quantity-selector.large .quantity-btn {
+  width: 44px;
+  height: 44px;
+}
+
+.quantity-selector.large .quantity-input {
+  width: 60px;
+  height: 44px;
+  font-size: 16px;
+}
+
+/* Disabled state */
+.quantity-selector.disabled {
+  opacity: 0.6;
+}
+
+.quantity-selector.disabled .quantity-controls {
+  border-color: #e9ecef;
+  background: #f8f9fa;
+}
+
+.quantity-selector.disabled .quantity-input {
+  background: #f8f9fa;
+  cursor: not-allowed;
+}
+
+/* Focus states */
+.quantity-input:focus {
+  background: #fff;
+  box-shadow: inset 0 0 0 1px #007bff;
+}
+
+.quantity-btn:focus {
+  outline: 2px solid #007bff;
+  outline-offset: -2px;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .quantity-selector.large .quantity-btn {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .quantity-selector.large .quantity-input {
+    width: 55px;
+    height: 40px;
+    font-size: 15px;
+  }
+  
+  .stock-info {
+    font-size: 11px;
+  }
+  
+  .max-quantity-info {
+    font-size: 10px;
+  }
+}
+
+/* Animation for stock status changes */
+.stock-status {
+  transition: color 0.3s ease;
+}
+
+/* Hover effects for interactive elements */
+.quantity-selector:not(.disabled) .quantity-controls:hover {
+  border-color: #007bff;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+/* Error state for quantity validation */
+.quantity-selector.error .quantity-controls {
+  border-color: #dc3545;
+}
+
+.quantity-selector.error .quantity-input {
+  color: #dc3545;
+}
+
+/* Loading state */
+.quantity-selector.loading {
+  position: relative;
+}
+
+.quantity-selector.loading::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+}
+
+/* Updating state */
+.quantity-selector.updating {
+  opacity: 0.8;
+}
+
+.quantity-selector.updating .quantity-btn {
+  pointer-events: none;
+}
+
+.quantity-selector.updating .quantity-input {
+  pointer-events: none;
+}
+
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+  .quantity-btn,
+  .stock-status {
+    transition: none;
+  }
+}

@@ -1,0 +1,148 @@
+.wishlist {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.wishlist-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.wishlist-header h2 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  color: #2c1810;
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.wishlist-header p {
+  color: #666;
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+.wishlist-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 2rem;
+}
+
+.wishlist-item {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease;
+}
+
+.wishlist-item:hover {
+  transform: translateY(-2px);
+}
+
+.item-image {
+  margin-bottom: 1rem;
+}
+
+.item-image img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.item-details h3 {
+  margin: 0 0 0.5rem 0;
+  color: #2c1810;
+  font-size: 1.1rem;
+}
+
+.item-price {
+  color: #d4a574;
+  font-weight: 600;
+  font-size: 1.2rem;
+  margin: 0.5rem 0;
+}
+
+.item-artisan {
+  color: #666;
+  font-size: 0.9rem;
+  margin: 0 0 1rem 0;
+}
+
+.item-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.btn-add-cart {
+  background: #d4a574;
+  color: white;
+  border: none;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 1;
+  justify-content: center;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.btn-add-cart:hover {
+  background: #b8956a;
+}
+
+.btn-remove {
+  background: #dc3545;
+  color: white;
+  border: none;
+  padding: 0.75rem;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-remove:hover {
+  background: #c82333;
+}
+
+.empty-wishlist {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: #666;
+}
+
+.empty-wishlist h3 {
+  margin: 1rem 0 0.5rem 0;
+  color: #333;
+  font-size: 1.5rem;
+}
+
+.wishlist-loading, .not-authorized {
+  text-align: center;
+  padding: 3rem;
+  color: #666;
+  font-size: 1.1rem;
+}
+
+@media (max-width: 768px) {
+  .wishlist-grid {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+  
+  .wishlist-item {
+    padding: 1rem;
+  }
+  
+  .item-actions {
+    flex-direction: column;
+  }
+}

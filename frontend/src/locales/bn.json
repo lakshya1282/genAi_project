@@ -1,0 +1,96 @@
+{
+  "navbar": {
+    "home": "হোম",
+    "marketplace": "বাজার",
+    "aiAssistant": "এআই সহায়ক",
+    "dashboard": "ড্যাশবোর্ড",
+    "cart": "কার্ট",
+    "account": "অ্যাকাউন্ট",
+    "login": "লগইন",
+    "register": "নিবন্ধন",
+    "logout": "লগআউট",
+    "notifications": "বিজ্ঞপ্তি"
+  },
+  "auth": {
+    "welcome": "স্বাগতম",
+    "loginTitle": "আপনার অ্যাকাউন্টে লগইন করুন",
+    "registerTitle": "আপনার অ্যাকাউন্ট তৈরি করুন",
+    "email": "ইমেইল",
+    "password": "পাসওয়ার্ড",
+    "confirmPassword": "পাসওয়ার্ড নিশ্চিত করুন",
+    "name": "পূর্ণ নাম",
+    "phone": "ফোন নম্বর",
+    "forgotPassword": "পাসওয়ার্ড ভুলে গেছেন?",
+    "rememberMe": "আমাকে মনে রাখুন",
+    "noAccount": "অ্যাকাউন্ট নেই?",
+    "hasAccount": "ইতিমধ্যে অ্যাকাউন্ট আছে?",
+    "signIn": "সাইন ইন",
+    "signUp": "সাইন আপ",
+    "customerLogin": "গ্রাহক লগইন",
+    "artisanLogin": "কারিগর লগইন"
+  },
+  "home": {
+    "hero": {
+      "title": "প্রামাণিক ভারতীয় কারুশিল্প আবিষ্কার করুন",
+      "subtitle": "প্রতিভাবান কারিগরদের সাথে সরাসরি যুক্ত হন এবং অনন্য হস্তনির্মিত গুপ্তধন ঘরে নিয়ে আসুন",
+      "cta": "বাজার দেখুন"
+    },
+    "features": {
+      "title": "কেন কারীগরী বেছে নিবেন",
+      "directConnect": "সরাসরি সংযোগ",
+      "directConnectDesc": "কারিগরদের সাথে সরাসরি যুক্ত হন এবং তাদের কারুকাজকে সমর্থন করুন",
+      "aiPowered": "এআই চালিত",
+      "aiPoweredDesc": "আমাদের এআই সহায়কের সাথে ব্যক্তিগত সুপারিশ পান",
+      "authentic": "প্রামাণিক পণ্য",
+      "authenticDesc": "প্রতিটি পণ্য সত্যতার গ্যারান্টি সহ আসে",
+      "secure": "নিরাপদ পেমেন্ট",
+      "secureDesc": "নিরাপদ এবং নির্ভরযোগ্য পেমেন্ট প্রক্রিয়া"
+    }
+  },
+  "customerSettings": {
+    "title": "গ্রাহক সেটিংস",
+    "profile": "প্রোফাইল সেটিংস",
+    "orders": "অর্ডার",
+    "wishlist": "ইচ্ছা তালিকা",
+    "coupons": "কুপন",
+    "helpCenter": "সাহায্য কেন্দ্র",
+    "recentlyViewed": "সম্প্রতি দেখা",
+    "language": "ভাষা",
+    "accountSettings": "অ্যাকাউন্ট সেটিংস",
+    "editProfile": "প্রোফাইল সম্পাদনা",
+    "savedAddresses": "সংরক্ষিত ঠিকানা",
+    "logout": "লগআউট"
+  },
+  "language": {
+    "title": "ভাষা পছন্দ",
+    "subtitle": "আপনার পছন্দের ভাষা বেছে নিন",
+    "english": "ইংরেজি",
+    "hindi": "হিন্দি",
+    "bengali": "বাংলা",
+    "tamil": "তামিল",
+    "telugu": "তেলুগু",
+    "gujarati": "গুজরাতি",
+    "marathi": "মারাঠি",
+    "kannada": "কন্নড়",
+    "malayalam": "মালয়ালাম",
+    "odia": "ওড়িয়া",
+    "punjabi": "পাঞ্জাবী",
+    "assamese": "অসমিয়া"
+  },
+  "common": {
+    "loading": "লোড হচ্ছে...",
+    "error": "ত্রুটি",
+    "success": "সফল",
+    "save": "সংরক্ষণ",
+    "cancel": "বাতিল",
+    "delete": "মুছে ফেলুন",
+    "edit": "সম্পাদনা",
+    "view": "দেখুন",
+    "close": "বন্ধ",
+    "search": "অনুসন্ধান"
+  },
+  "messages": {
+    "languageUpdated": "ভাষা সফলভাবে আপডেট করা হয়েছে",
+    "languageUpdateError": "ভাষা আপডেট করতে ব্যর্থ"
+  }
+}
