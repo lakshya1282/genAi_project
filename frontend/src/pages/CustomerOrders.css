@@ -1,0 +1,21 @@
+.customer-orders-page {
+  min-height: 100vh;
+  background: #f8f9fa;
+  padding: 2rem 0;
+}
+
+.customer-orders-page .container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+@media (max-width: 768px) {
+  .customer-orders-page {
+    padding: 1rem 0;
+  }
+  
+  .customer-orders-page .container {
+    padding: 0 0.5rem;
+  }
+}

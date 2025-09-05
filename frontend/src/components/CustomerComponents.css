@@ -1,0 +1,740 @@
+/* Common styles for all customer components */
+
+.section-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.section-header h2 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  color: #2c1810;
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.section-header p {
+  color: #666;
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+.loading, .not-authorized {
+  text-align: center;
+  padding: 3rem;
+  color: #666;
+  font-size: 1.1rem;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: #666;
+}
+
+.empty-state h3, .empty-state h4 {
+  margin: 1rem 0 0.5rem 0;
+  color: #333;
+}
+
+
+/* Language Selector Styles */
+.language-selector {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.languages-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.language-option {
+  background: white;
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 1.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.language-option:hover {
+  border-color: #d4a574;
+  transform: translateY(-2px);
+}
+
+.language-option.selected {
+  border-color: #d4a574;
+  background: #f9f7f4;
+}
+
+.language-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.language-name {
+  font-weight: 600;
+  color: #2c1810;
+}
+
+.language-native {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.selected-icon {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  color: #d4a574;
+  font-size: 1.2rem;
+}
+
+/* Account Settings Styles */
+.account-settings {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.section-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.section-title h3 {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #2c1810;
+  margin: 0;
+}
+
+.add-address-btn {
+  background: #d4a574;
+  color: white;
+  border: none;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 500;
+}
+
+.add-address-btn:hover {
+  background: #b8956a;
+}
+
+.addresses-list {
+  display: grid;
+  gap: 1rem;
+}
+
+.address-card {
+  background: white;
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+
+.address-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.address-type {
+  background: #d4a574;
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.default-badge {
+  background: #28a745;
+  color: white;
+  padding: 0.25rem 0.5rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+}
+
+.address-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.address-actions button {
+  background: transparent;
+  border: 2px solid #e0e0e0;
+  color: #666;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.85rem;
+}
+
+.address-actions button:hover {
+  border-color: #d4a574;
+  color: #d4a574;
+}
+
+.address-form-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  max-width: 500px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal-content h3 {
+  margin: 0 0 1.5rem 0;
+  color: #2c1810;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: #2c1810;
+}
+
+.form-group input, .form-group select {
+  width: 100%;
+  padding: 0.75rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 0.95rem;
+}
+
+.form-group.checkbox label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: normal;
+}
+
+.form-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  margin-top: 2rem;
+}
+
+.form-actions button {
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.form-actions button[type="submit"] {
+  background: #d4a574;
+  color: white;
+  border: none;
+}
+
+.form-actions button[type="button"] {
+  background: transparent;
+  color: #666;
+  border: 2px solid #e0e0e0;
+}
+
+/* Activity/Reviews Styles */
+.my-activity {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.activity-section h3 {
+  color: #2c1810;
+  margin-bottom: 2rem;
+}
+
+.reviews-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.review-card {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+}
+
+.review-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.rating {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.star-filled {
+  color: #ffc107;
+}
+
+.star-empty {
+  color: #e0e0e0;
+}
+
+.rating-text {
+  margin-left: 0.5rem;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.review-date {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  color: #666;
+  font-size: 0.85rem;
+}
+
+.review-content p {
+  color: #333;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.review-images {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.review-images img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+/* Help Center Styles */
+.help-center {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.help-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.help-header h2 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  color: #2c1810;
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.help-header p {
+  color: #666;
+  font-size: 1.2rem;
+  margin: 0;
+}
+
+.help-navigation {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 3rem;
+  padding: 1rem;
+  background: #f9f7f4;
+  border-radius: 15px;
+}
+
+.nav-button {
+  background: white;
+  border: 2px solid #e0e0e0;
+  color: #666;
+  padding: 0.75rem 1.5rem;
+  border-radius: 25px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.nav-button:hover {
+  border-color: #d4a574;
+  color: #d4a574;
+  transform: translateY(-2px);
+}
+
+.nav-button.active {
+  background: #d4a574;
+  border-color: #d4a574;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(212, 165, 116, 0.3);
+}
+
+.help-content {
+  background: white;
+  border-radius: 15px;
+  padding: 2rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.section-content h3 {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #2c1810;
+  font-size: 1.8rem;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+.help-items {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.help-item {
+  background: #f9f7f4;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.help-item:hover {
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.help-item-header {
+  width: 100%;
+  background: transparent;
+  border: none;
+  padding: 1.5rem;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  text-align: left;
+  transition: background-color 0.3s ease;
+}
+
+.help-item-header:hover {
+  background: rgba(212, 165, 116, 0.1);
+}
+
+.help-item-title {
+  font-weight: 600;
+  color: #2c1810;
+  font-size: 1.1rem;
+}
+
+.help-item-header svg {
+  color: #d4a574;
+  font-size: 1rem;
+  transition: transform 0.3s ease;
+}
+
+.help-item-content {
+  padding: 0 1.5rem 1.5rem;
+  color: #333;
+  line-height: 1.7;
+}
+
+.help-item-content p {
+  margin: 0 0 1rem 0;
+}
+
+.video-placeholder {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  background: #e8f5e8;
+  border-radius: 8px;
+  margin-top: 1rem;
+  color: #2d5a2d;
+  border-left: 4px solid #4caf50;
+}
+
+.play-icon {
+  color: #4caf50;
+  font-size: 1.2rem;
+}
+
+.contact-section {
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 2px solid #f0f0f0;
+}
+
+.contact-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+.contact-info h4 {
+  color: #2c1810;
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+}
+
+.contact-details {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.contact-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  background: #f9f7f4;
+  border-radius: 8px;
+  color: #333;
+}
+
+.contact-item svg {
+  color: #d4a574;
+  font-size: 1.1rem;
+  min-width: 20px;
+}
+
+.contact-form-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.contact-form-button {
+  background: #d4a574;
+  color: white;
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: 25px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.contact-form-button:hover {
+  background: #b8956a;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(212, 165, 116, 0.4);
+}
+
+.contact-form-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.contact-form-modal .modal-content {
+  background: white;
+  border-radius: 15px;
+  padding: 2rem;
+  max-width: 500px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.contact-form-modal .modal-content h3 {
+  color: #2c1810;
+  margin: 0 0 2rem 0;
+  text-align: center;
+  font-size: 1.5rem;
+}
+
+.contact-form-modal .form-group {
+  margin-bottom: 1.5rem;
+}
+
+.contact-form-modal .form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: #2c1810;
+}
+
+.contact-form-modal .form-group input,
+.contact-form-modal .form-group select,
+.contact-form-modal .form-group textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+  font-family: inherit;
+}
+
+.contact-form-modal .form-group input:focus,
+.contact-form-modal .form-group select:focus,
+.contact-form-modal .form-group textarea:focus {
+  outline: none;
+  border-color: #d4a574;
+}
+
+.contact-form-modal .form-group textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.contact-form-modal .form-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  margin-top: 2rem;
+}
+
+.contact-form-modal .form-actions button {
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.contact-form-modal .form-actions button[type="submit"] {
+  background: #d4a574;
+  color: white;
+  border: none;
+}
+
+.contact-form-modal .form-actions button[type="submit"]:hover {
+  background: #b8956a;
+}
+
+.contact-form-modal .form-actions button[type="button"] {
+  background: transparent;
+  color: #666;
+  border: 2px solid #e0e0e0;
+}
+
+.contact-form-modal .form-actions button[type="button"]:hover {
+  border-color: #d4a574;
+  color: #d4a574;
+}
+
+@media (max-width: 768px) {
+  .help-center {
+    padding: 1rem;
+  }
+  
+  .help-header h2 {
+    font-size: 2rem;
+  }
+  
+  .help-navigation {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .nav-button {
+    justify-content: center;
+  }
+  
+  .help-content {
+    padding: 1rem;
+  }
+  
+  .contact-options {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  
+  .languages-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+  
+  .review-header {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .contact-form-modal .modal-content {
+    margin: 1rem;
+    padding: 1.5rem;
+  }
+
+  .contact-form-modal .form-actions {
+    flex-direction: column;
+  }
+}

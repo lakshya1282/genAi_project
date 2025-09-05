@@ -1,0 +1,100 @@
+.product-management-container {
+  width: 100%;
+  min-height: 100vh;
+  background-color: #f8f9fa;
+}
+
+/* Additional styles for edit form image management */
+.existing-images-section,
+.new-images-section {
+  margin-bottom: 20px;
+}
+
+.existing-images-section h4,
+.new-images-section h4 {
+  margin: 0 0 15px 0;
+  color: #495057;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.marked-for-removal {
+  opacity: 0.5;
+  filter: grayscale(100%);
+}
+
+.restore-image-btn {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background: rgba(40, 167, 69, 0.9);
+  color: white;
+  border: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  transition: background-color 0.2s ease;
+}
+
+.restore-image-btn:hover {
+  background: #28a745;
+}
+
+/* Modal overlay styles for forms */
+.add-product-form-container,
+.edit-product-form-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.add-product-form-container > div:first-child,
+.edit-product-form-container > div:first-child {
+  position: relative;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  max-width: 800px;
+  width: 100%;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .add-product-form-container,
+  .edit-product-form-container {
+    padding: 10px;
+  }
+  
+  .add-product-form-container > div:first-child,
+  .edit-product-form-container > div:first-child {
+    max-height: 95vh;
+  }
+}
+
+@media (max-width: 480px) {
+  .add-product-form-container,
+  .edit-product-form-container {
+    padding: 5px;
+  }
+  
+  .add-product-form-container > div:first-child,
+  .edit-product-form-container > div:first-child {
+    max-height: 98vh;
+  }
+}
