@@ -3,7 +3,7 @@
 An innovative MERN stack platform that empowers Indian artisans with AI-driven marketing tools, storytelling assistance, and digital marketplace capabilities.
 
 ## 🌟 Features
-this is delete function one
+this is delete function 
 ### For Artisans:
 - **AI Story Generation**: Craft compelling narratives about their journey and traditions
 - **Enhanced Product Descriptions**: Transform basic descriptions into engaging, culturally-rich content
