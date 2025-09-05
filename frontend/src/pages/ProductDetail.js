@@ -4,9 +4,10 @@ import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { FaShoppingCart, FaHeart, FaPlus, FaMinus } from 'react-icons/fa';
-import WishlistToggle from '../components/WishlistToggle';
+import { FaPlus, FaMinus } from 'react-icons/fa';
+import { FiShield, FiTruck, FiRotateCcw } from 'react-icons/fi';
 import ReviewForm from '../components/ReviewForm';
+import StarRating from '../components/StarRating';
 import './ProductDetail.css';
 
 const ProductDetail = () => {
@@ -211,121 +212,122 @@ const ProductDetail = () => {
           </div>
 
           <div className="product-info-section">
-            <div className="product-header">
-              <h1 className="product-title">
-                {product.name}
-              </h1>
-              
-              {/* Star Rating */}
+            {/* Product Title */}
+            <h1 className="product-title">
+              {product.name}
+            </h1>
+            
+            {/* Star Rating */}
+            <div className="rating-wrapper">
               <StarRating 
                 rating={product.rating || averageRating || 4.5} 
                 totalReviews={product.totalReviews || totalReviews || 100}
                 size="medium"
               />
-              
-              {/* Price Section */}
-              <div className="price-container">
-                <div className="current-price">₹{product.price?.toLocaleString()}</div>
-                {product.originalPrice && (
-                  <div className="original-price">₹{product.originalPrice?.toLocaleString()}</div>
-                )}
+            </div>
+            
+            {/* Price Section */}
+            <div className="price-container">
+              <div className="current-price">₹{product.price?.toLocaleString()}</div>
+              {product.originalPrice && (
+                <div className="original-price">₹{product.originalPrice?.toLocaleString()}</div>
+              )}
+            </div>
+            
+            {/* Product Description */}
+            <div className="product-description-modern">
+              <p>{product.aiEnhancedDescription || product.description}</p>
+            </div>
+            
+            {/* Product Features */}
+            {product.features && product.features.length > 0 && (
+              <div className="product-features">
+                {product.features.map((feature, index) => (
+                  <div key={index} className="feature-item">
+                    <span className="checkmark">✓</span>
+                    <span className="feature-text">{feature}</span>
+                  </div>
+                ))}
               </div>
-              
-              {/* Product Description */}
-              <div className="product-description-modern">
-                <p>{product.aiEnhancedDescription || product.description}</p>
-              </div>
-              
-              {/* Product Features */}
-              {product.features && product.features.length > 0 && (
-                <div className="product-features">
-                  {product.features.map((feature, index) => (
-                    <div key={index} className="feature-item">
-                      <span className="checkmark">✓</span>
-                      <span className="feature-text">{feature}</span>
-                    </div>
-                  ))}
+            )}
+            
+            {/* Quantity and Add to Cart */}
+            <div className="purchase-controls">
+              {stockStatus.status !== 'out-of-stock' && (
+                <div className="quantity-section">
+                  <label>Quantity:</label>
+                  <div className="quantity-controls-modern">
+                    <button
+                      onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                      className="qty-btn-modern"
+                      disabled={quantity <= 1}
+                    >
+                      <FaMinus />
+                    </button>
+                    <span className="quantity-value">{quantity}</span>
+                    <button
+                      onClick={() => setQuantity(Math.min(product.stock || 999, quantity + 1))}
+                      className="qty-btn-modern"
+                      disabled={product.stock !== undefined && quantity >= product.stock}
+                    >
+                      <FaPlus />
+                    </button>
+                  </div>
                 </div>
               )}
               
-              {/* Quantity and Add to Cart */}
-              <div className="purchase-controls">
-                {stockStatus.status !== 'out-of-stock' && (
-                  <div className="quantity-section">
-                    <label>Quantity:</label>
-                    <div className="quantity-controls-modern">
-                      <button
-                        onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                        className="qty-btn-modern"
-                        disabled={quantity <= 1}
-                      >
-                        <FaMinus />
-                      </button>
-                      <span className="quantity-value">{quantity}</span>
-                      <button
-                        onClick={() => setQuantity(Math.min(product.stock || 999, quantity + 1))}
-                        className="qty-btn-modern"
-                        disabled={product.stock !== undefined && quantity >= product.stock}
-                      >
-                        <FaPlus />
-                      </button>
-                    </div>
-                  </div>
+              <button 
+                className={`add-to-cart-btn ${
+                  stockStatus.status === 'out-of-stock' || addingToCart ? 'disabled' : ''
+                } ${cartSuccess ? 'success' : ''}`}
+                onClick={handleAddToCart}
+                disabled={addingToCart || stockStatus.status === 'out-of-stock'}
+              >
+                {cartSuccess ? (
+                  'Added Successfully!'
+                ) : addingToCart ? (
+                  'Adding to Cart...'
+                ) : stockStatus.status === 'out-of-stock' ? (
+                  'Out of Stock'
+                ) : (
+                  'Add to cart'
                 )}
-                
-                <button 
-                  className={`add-to-cart-btn ${
-                    stockStatus.status === 'out-of-stock' || addingToCart ? 'disabled' : ''
-                  } ${cartSuccess ? 'success' : ''}`}
-                  onClick={handleAddToCart}
-                  disabled={addingToCart || stockStatus.status === 'out-of-stock'}
-                >
-                  {cartSuccess ? (
-                    'Added Successfully!'
-                  ) : addingToCart ? (
-                    'Adding to Cart...'
-                  ) : stockStatus.status === 'out-of-stock' ? (
-                    'Out of Stock'
-                  ) : (
-                    'Add to cart'
-                  )}
-                </button>
-                
-                {product.stock !== undefined && quantity >= product.stock && (
-                  <small className="stock-warning-modern">
-                    ⚠️ Maximum available: {product.stock}
-                  </small>
-                )}
-              </div>
+              </button>
               
-              {/* Security Features */}
-              <div className="security-features">
-                <div className="security-item">
-                  <FiShield className="security-icon" />
-                  <span>Secure checkout</span>
-                </div>
-                <div className="security-badges">
-                  <span className="payment-badge">VISA</span>
-                  <span className="payment-badge">PayPal</span>
-                  <span className="payment-badge">Mastercard</span>
-                  <span className="payment-badge">Amex</span>
-                </div>
+              {product.stock !== undefined && quantity >= product.stock && (
+                <small className="stock-warning-modern">
+                  ⚠️ Maximum available: {product.stock}
+                </small>
+              )}
+            </div>
+            
+            {/* Security Features */}
+            <div className="security-features">
+              <div className="security-item">
+                <FiShield className="security-icon" />
+                <span>Secure checkout</span>
               </div>
-              
-              {/* Additional Benefits */}
-              <div className="benefits-section">
-                <div className="benefit-item">
-                  <FiTruck className="benefit-icon" />
-                  <span>Free Shipping</span>
-                </div>
-                <div className="benefit-item">
-                  <FiRotateCcw className="benefit-icon" />
-                  <span>2-Year Limited Warranty</span>
-                </div>
-                <div className="benefit-item">
-                  <FiShield className="benefit-icon" />
-                  <span>30-Day Money Back Guarantee</span>
-                </div>
+              <div className="security-badges">
+                <span className="payment-badge">VISA</span>
+                <span className="payment-badge">PayPal</span>
+                <span className="payment-badge">Mastercard</span>
+                <span className="payment-badge">Amex</span>
+              </div>
+            </div>
+            
+            {/* Additional Benefits */}
+            <div className="benefits-section">
+              <div className="benefit-item">
+                <FiTruck className="benefit-icon" />
+                <span>Free Shipping</span>
+              </div>
+              <div className="benefit-item">
+                <FiRotateCcw className="benefit-icon" />
+                <span>2-Year Limited Warranty</span>
+              </div>
+              <div className="benefit-item">
+                <FiShield className="benefit-icon" />
+                <span>30-Day Money Back Guarantee</span>
               </div>
             </div>
           </div>
