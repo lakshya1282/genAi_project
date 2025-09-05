@@ -56,6 +56,13 @@ const ProductDetail = () => {
         materials: ['Premium Clay from Alwar', 'Natural Cobalt Blue Pigments', 'Traditional Lead-Free Glazes', 'Gold Accents'],
         dimensions: { length: 15, width: 15, height: 25 },
         craftingTime: '2 weeks (including drying time)',
+        features: [
+          'Handcrafted with Traditional Techniques',
+          '100% Natural Materials Used',
+          'Lead-Free Food Safe Glazes',
+          'Unique Artisan Signature Design',
+          'Dishwasher Safe (Hand wash recommended)'
+        ],
         views: 124,
         likes: 28,
         stock: 6,
@@ -180,22 +187,21 @@ const ProductDetail = () => {
   const stockStatus = getStockStatus(product);
   
   return (
-    <div className={`product-detail ${stockStatus.class}`}>
+    <div className={`modern-product-page ${stockStatus.class}`}>
       <div className="container">
-        <div className="product-content">
-          <div className="product-images">
-            <div className="main-image">
-              <img 
-                src={product.images?.[0] || 'https://via.placeholder.com/500x500?text=Handcraft'} 
-                alt={product.name} 
-              />
-              {/* Stock Status Badge - Only show if stock info is available */}
-              {(product.stock !== undefined || product.isAvailable !== undefined) && (
-                <div className={`stock-badge ${stockStatus.class}`}>
-                  {stockStatus.label}
+        <div className="product-layout">
+          <div className="product-image-section">
+            <div className="image-container">
+              {product.discount && (
+                <div className="discount-badge">
+                  {product.discount}% OFF
                 </div>
               )}
-              {/* Out of Stock Overlay */}
+              <img 
+                src={product.images?.[0] || 'https://via.placeholder.com/500x500?text=Handcraft'} 
+                alt={product.name}
+                className="product-image"
+              />
               {stockStatus.status === 'out-of-stock' && (
                 <div className="out-of-stock-overlay">
                   <span className="out-of-stock-text">{stockStatus.label}</span>
@@ -204,45 +210,61 @@ const ProductDetail = () => {
             </div>
           </div>
 
-          <div className="product-info">
+          <div className="product-info-section">
             <div className="product-header">
-              <h1 className={stockStatus.status === 'out-of-stock' ? 'out-of-stock-text' : ''}>
+              <h1 className="product-title">
                 {product.name}
               </h1>
-              <div className="product-meta">
-                <span className="category-badge">{product.category}</span>
-                <div className="product-stats">
-                  <span>👁️ {product.views} {t('product.views')}</span>
-                  <span>❤️ {product.likes} {t('product.likes')}</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="price-section">
-              <div className={`price ${stockStatus.status === 'out-of-stock' ? 'out-of-stock-price' : ''}`}>
-                ₹{product.price?.toLocaleString()}
-              </div>
-              <div className="crafting-time">
-                ⏱️ {t('product.craftingTime')}: {product.craftingTime || t('product.contactArtisan')}
+              
+              {/* Star Rating */}
+              <StarRating 
+                rating={product.rating || averageRating || 4.5} 
+                totalReviews={product.totalReviews || totalReviews || 100}
+                size="medium"
+              />
+              
+              {/* Price Section */}
+              <div className="price-container">
+                <div className="current-price">₹{product.price?.toLocaleString()}</div>
+                {product.originalPrice && (
+                  <div className="original-price">₹{product.originalPrice?.toLocaleString()}</div>
+                )}
               </div>
               
-              {/* Quick Add to Cart Section */}
-              <div className="quick-purchase">
+              {/* Product Description */}
+              <div className="product-description-modern">
+                <p>{product.aiEnhancedDescription || product.description}</p>
+              </div>
+              
+              {/* Product Features */}
+              {product.features && product.features.length > 0 && (
+                <div className="product-features">
+                  {product.features.map((feature, index) => (
+                    <div key={index} className="feature-item">
+                      <span className="checkmark">✓</span>
+                      <span className="feature-text">{feature}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+              
+              {/* Quantity and Add to Cart */}
+              <div className="purchase-controls">
                 {stockStatus.status !== 'out-of-stock' && (
-                  <div className="quantity-selector-inline">
+                  <div className="quantity-section">
                     <label>Quantity:</label>
-                    <div className="quantity-controls-inline">
+                    <div className="quantity-controls-modern">
                       <button
                         onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                        className="qty-btn-small"
+                        className="qty-btn-modern"
                         disabled={quantity <= 1}
                       >
                         <FaMinus />
                       </button>
-                      <span className="quantity-display">{quantity}</span>
+                      <span className="quantity-value">{quantity}</span>
                       <button
                         onClick={() => setQuantity(Math.min(product.stock || 999, quantity + 1))}
-                        className="qty-btn-small"
+                        className="qty-btn-modern"
                         disabled={product.stock !== undefined && quantity >= product.stock}
                       >
                         <FaPlus />
@@ -251,191 +273,115 @@ const ProductDetail = () => {
                   </div>
                 )}
                 
-                <div className="primary-actions">
-                  <button 
-                    className={`btn btn-cart-primary ${
-                      stockStatus.status === 'out-of-stock' || addingToCart ? 'disabled' : ''
-                    } ${cartSuccess ? 'success' : ''}`}
-                    onClick={handleAddToCart}
-                    disabled={addingToCart || stockStatus.status === 'out-of-stock'}
-                  >
-                    {cartSuccess ? (
-                      <>✓ Added Successfully!</>
-                    ) : addingToCart ? (
-                      <>🔄 Adding...</>
-                    ) : stockStatus.status === 'out-of-stock' ? (
-                      'Out of Stock'
-                    ) : (
-                      <>
-                        <FaShoppingCart />
-                        Add {quantity} to Cart
-                      </>
-                    )}
-                  </button>
-                  
-                  <WishlistToggle productId={product._id} className="wishlist-btn-inline" />
-                </div>
+                <button 
+                  className={`add-to-cart-btn ${
+                    stockStatus.status === 'out-of-stock' || addingToCart ? 'disabled' : ''
+                  } ${cartSuccess ? 'success' : ''}`}
+                  onClick={handleAddToCart}
+                  disabled={addingToCart || stockStatus.status === 'out-of-stock'}
+                >
+                  {cartSuccess ? (
+                    'Added Successfully!'
+                  ) : addingToCart ? (
+                    'Adding to Cart...'
+                  ) : stockStatus.status === 'out-of-stock' ? (
+                    'Out of Stock'
+                  ) : (
+                    'Add to cart'
+                  )}
+                </button>
                 
                 {product.stock !== undefined && quantity >= product.stock && (
-                  <small className="stock-warning-inline">
+                  <small className="stock-warning-modern">
                     ⚠️ Maximum available: {product.stock}
                   </small>
                 )}
               </div>
-            </div>
-            
-            {/* Stock Information - Only show if stock info is available */}
-            {(product.stock !== undefined || product.isAvailable !== undefined) && (
-              <div className="stock-section">
-                <div className="stock-info-detail">
-                  <span className={`stock-status ${stockStatus.class}`}>
-                    {stockStatus.label}
-                    {product.stock !== undefined && product.stock > 0 && stockStatus.status !== 'in-stock' && (
-                      <span className="stock-count"> - {product.stock} remaining</span>
-                    )}
-                  </span>
-                </div>
-              </div>
-            )}
-
-            <div className="product-description">
-              <h3>📝 About This Handcraft</h3>
-              <p>{product.aiEnhancedDescription || product.description}</p>
               
-              {product.tags && product.tags.length > 0 && (
-                <div className="product-tags">
-                  <h4>Tags</h4>
-                  <div className="tags-list">
-                    {product.tags.map((tag, index) => (
-                      <span key={index} className="tag-item">
-                        #{tag}
-                      </span>
-                    ))}
-                  </div>
+              {/* Security Features */}
+              <div className="security-features">
+                <div className="security-item">
+                  <FiShield className="security-icon" />
+                  <span>Secure checkout</span>
                 </div>
-              )}
-            </div>
-
-            {product.materials && product.materials.length > 0 && (
-              <div className="materials-section">
-                <h3>🎨 {t('product.materialsUsed')}</h3>
-                <div className="materials-list">
-                  {product.materials.map((material, index) => (
-                    <span key={index} className="material-tag">
-                      ✓ {material}
-                    </span>
-                  ))}
+                <div className="security-badges">
+                  <span className="payment-badge">VISA</span>
+                  <span className="payment-badge">PayPal</span>
+                  <span className="payment-badge">Mastercard</span>
+                  <span className="payment-badge">Amex</span>
                 </div>
               </div>
-            )}
-
-            {product.dimensions && (
-              <div className="dimensions-section">
-                <h3>📏 Dimensions</h3>
-                <div className="dimensions">
-                  L: {product.dimensions.length}cm × W: {product.dimensions.width}cm × H: {product.dimensions.height}cm
-                </div>
-                <div className="dimensions-visual">
-                  <div className="dimension-box">
-                    <div className="dimension-item">
-                      <span className="dimension-label">Length</span>
-                      <span className="dimension-value">{product.dimensions.length}cm</span>
-                    </div>
-                    <div className="dimension-item">
-                      <span className="dimension-label">Width</span>
-                      <span className="dimension-value">{product.dimensions.width}cm</span>
-                    </div>
-                    <div className="dimension-item">
-                      <span className="dimension-label">Height</span>
-                      <span className="dimension-value">{product.dimensions.height}cm</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* Quantity and Add to Cart */}
-            <div className="purchase-section">
-              {stockStatus.status !== 'out-of-stock' && (
-                <div className="quantity-selector">
-                  <label>{t('product.quantity')}:</label>
-                  <div className="quantity-controls">
-                    <button
-                      onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                      className="qty-btn"
-                      disabled={quantity <= 1}
-                    >
-                      -
-                    </button>
-                    <span className="quantity">{quantity}</span>
-                    <button
-                      onClick={() => setQuantity(Math.min(product.stock || 999, quantity + 1))}
-                      className="qty-btn"
-                      disabled={product.stock !== undefined && quantity >= product.stock}
-                    >
-                      +
-                    </button>
-                  </div>
-                  {product.stock !== undefined && quantity >= product.stock && (
-                    <small className="stock-warning">
-                      Maximum available: {product.stock}
-                    </small>
-                  )}
-                </div>
-              )}
               
-              <div className="action-buttons">
-                <button 
-                  className={`btn btn-cart btn-lg ${
-                    stockStatus.status === 'out-of-stock' ? 'btn-secondary disabled' : ''
-                  }`}
-                  onClick={handleAddToCart}
-                  disabled={addingToCart || stockStatus.status === 'out-of-stock'}
-                >
-                  <FaShoppingCart /> 
-                  {stockStatus.status === 'out-of-stock' 
-                    ? t('product.outOfStock') 
-                    : (addingToCart ? t('product.adding') : t('product.addToCart'))
-                  }
-                </button>
-                <WishlistToggle productId={product._id} className="with-text" showText={true} />
-                <button className="btn btn-secondary" onClick={handleLike}>
-                  <FaHeart /> {t('product.like')} ({product.likes})
-                </button>
-                <button className="btn btn-primary">
-                  💬 {t('product.contactArtisanButton')}
-                </button>
+              {/* Additional Benefits */}
+              <div className="benefits-section">
+                <div className="benefit-item">
+                  <FiTruck className="benefit-icon" />
+                  <span>Free Shipping</span>
+                </div>
+                <div className="benefit-item">
+                  <FiRotateCcw className="benefit-icon" />
+                  <span>2-Year Limited Warranty</span>
+                </div>
+                <div className="benefit-item">
+                  <FiShield className="benefit-icon" />
+                  <span>30-Day Money Back Guarantee</span>
+                </div>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Artisan Section */}
-        <div className="artisan-section">
-          <div className="artisan-card">
-            <div className="artisan-header">
-              <div className="artisan-avatar">
-                👤
+        {/* Additional Product Information */}
+        <div className="product-additional-info">
+          {/* Artisan Information */}
+          {product.artisan && (
+            <div className="artisan-section-modern">
+              <h3>Meet the Artisan</h3>
+              <div className="artisan-card-modern">
+                <div className="artisan-avatar">
+                  👤
+                </div>
+                <div className="artisan-info">
+                  <h4>{product.artisan.name}</h4>
+                  <p>📍 {product.artisan.location?.city}, {product.artisan.location?.state}</p>
+                  <p>🎨 {product.artisan.craftType} Specialist</p>
+                  {product.artisan.rating && (
+                    <StarRating rating={product.artisan.rating} totalReviews={0} size="small" />
+                  )}
+                </div>
+                <Link to={`/artisan/${product.artisan._id}/profile`} className="view-profile-btn">
+                  View Profile
+                </Link>
               </div>
-              <div className="artisan-info">
-                <h3>{product.artisan?.name}</h3>
-                <p>📍 {product.artisan?.location?.city}, {product.artisan?.location?.state}</p>
-                <p>🎨 {product.artisan?.craftType} {t('product.specialist')}</p>
-                {product.artisan?.rating && (
-                  <div className="rating">
-                    ⭐ {product.artisan.rating}/5.0
-                  </div>
-                )}
-              </div>
-              <Link to={`/artisan/${product.artisan?._id}/profile`} className="btn btn-primary">
-                {t('product.viewProfile')}
-              </Link>
+              {product.artisan.story && (
+                <div className="artisan-story">
+                  <p>{product.artisan.story}</p>
+                </div>
+              )}
             </div>
+          )}
+          
+          {/* Materials and Dimensions */}
+          <div className="product-details-modern">
+            {product.materials && product.materials.length > 0 && (
+              <div className="materials-section">
+                <h4>Materials Used</h4>
+                <div className="materials-grid">
+                  {product.materials.map((material, index) => (
+                    <div key={index} className="material-item">
+                      ✓ {material}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
             
-            {product.artisan?.story && (
-              <div className="artisan-story">
-                <h4>{t('product.artisanStory')}</h4>
-                <p>{product.artisan.story}</p>
+            {product.dimensions && (
+              <div className="dimensions-section">
+                <h4>Dimensions</h4>
+                <div className="dimensions-info">
+                  {product.dimensions.length} × {product.dimensions.width} × {product.dimensions.height} cm
+                </div>
               </div>
             )}
           </div>
