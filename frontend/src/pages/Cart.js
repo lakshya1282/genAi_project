@@ -46,7 +46,11 @@ const Cart = () => {
     }
   }, [cart, cartLastUpdated, userType, navigate]);
 
-  const handleRemoveItem = async (itemId) => {
+  const handleRemoveItem = async (itemId, productName) => {
+    // Show confirmation dialog
+    const confirmed = window.confirm(`Are you sure you want to remove "${productName}" from your cart?`);
+    if (!confirmed) return;
+
     setLoading(true);
     const result = await removeFromCart(itemId);
     if (result.success) {
@@ -225,11 +229,13 @@ const Cart = () => {
 
                   <div className="item-actions">
                     <button
-                      onClick={() => handleRemoveItem(item._id)}
-                      className="remove-btn"
-                      title={t('cart.removeItem')}
+                      onClick={() => handleRemoveItem(item._id, item.product.name)}
+                      className="delete-btn"
+                      title="Remove from cart"
+                      aria-label="Delete item from cart"
                     >
                       <FaTrash />
+                      <span className="delete-text">Delete</span>
                     </button>
                   </div>
                 </div>

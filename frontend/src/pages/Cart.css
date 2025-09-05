@@ -71,11 +71,12 @@
 
 .cart-item {
   display: grid;
-  grid-template-columns: 100px 1fr auto auto auto;
+  grid-template-columns: 100px 2fr 1fr 1fr auto;
   gap: 1rem;
   align-items: center;
   padding: 1rem 0;
   border-bottom: 1px solid #ecf0f1;
+  min-height: 120px;
 }
 
 .cart-item:last-child {
@@ -166,19 +167,63 @@
   background: #e74c3c;
   color: white;
   border: none;
-  width: 35px;
-  height: 35px;
-  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.2s;
+  transition: all 0.3s ease;
+  font-size: 16px;
+  box-shadow: 0 2px 4px rgba(231, 76, 60, 0.3);
 }
 
 .remove-btn:hover {
   background: #c0392b;
-  transform: scale(1.1);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(231, 76, 60, 0.4);
+}
+
+.remove-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(231, 76, 60, 0.3);
+}
+
+/* New delete button with text */
+.delete-btn {
+  background: #e74c3c;
+  color: white;
+  border: 1px solid #e74c3c;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  min-width: 80px;
+  justify-content: center;
+  box-shadow: 0 2px 4px rgba(231, 76, 60, 0.2);
+}
+
+.delete-btn:hover {
+  background: #c0392b;
+  border-color: #c0392b;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(231, 76, 60, 0.3);
+}
+
+.delete-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(231, 76, 60, 0.2);
+}
+
+.delete-text {
+  font-size: 12px;
+  font-weight: 600;
 }
 
 .cart-summary {
@@ -278,11 +323,15 @@
   }
 
   .cart-item {
-    grid-template-columns: 80px 1fr;
+    grid-template-columns: 80px 1fr auto;
     grid-template-areas: 
-      "image details"
-      "controls controls";
+      "image details actions"
+      "controls controls controls";
     gap: 0.5rem;
+    padding: 1rem;
+    border: 1px solid #ecf0f1;
+    border-radius: 8px;
+    margin-bottom: 1rem;
   }
 
   .item-image {
@@ -293,15 +342,24 @@
     grid-area: details;
   }
 
-  .quantity-controls,
-  .item-total,
-  .remove-btn {
-    grid-area: controls;
-    justify-self: start;
+  .item-actions {
+    grid-area: actions;
+    justify-self: end;
+    align-self: start;
   }
 
-  .quantity-controls {
+  .quantity-section,
+  .item-total {
+    grid-area: controls;
+    justify-self: start;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
     margin-top: 0.5rem;
+  }
+
+  .quantity-section {
+    flex-direction: row;
   }
 }
 
@@ -408,7 +466,11 @@
 .item-actions {
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
   gap: 0.5rem;
+  min-width: 100px;
+  padding: 0 0.5rem;
 }
 
 /* Summary Updates */
