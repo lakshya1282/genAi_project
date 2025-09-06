@@ -39,82 +39,218 @@ const ProductDetail = () => {
       // Use sample data for demo based on the ID
       let sampleProduct;
       
-      if (id === '68b9e5f1e2695ca11c71b3df') {
-        // This is the "Gold Plated Ring" from your screenshot
-        sampleProduct = {
-          _id: id,
-          name: 'Gold Plated Ring',
-          description: 'Beautiful handcrafted gold plated ring with intricate designs',
-          aiEnhancedDescription: 'A stunning gold plated ring that embodies traditional craftsmanship with modern elegance.',
-          price: 500,
-          category: 'Jewelry',
-          images: ['https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=500&h=500&fit=crop'],
-          artisan: {
-            _id: 'sample-artisan-jewelry',
-            name: 'Priya Sharma',
-            location: { city: 'Jaipur', state: 'Rajasthan' },
-            craftType: 'Jewelry',
-            story: 'Master jeweler with 20 years of experience in traditional Indian jewelry making.',
-            rating: 4.5
-          },
-          materials: ['Gold Plating', 'Brass Base', 'Traditional Polish'],
-          dimensions: { diameter: 2, thickness: 0.3, weight: 5 },
-          craftingTime: '1 week',
-          features: [
-            'Handcrafted Gold Plating',
-            'Traditional Designs',
-            'Adjustable Size',
-            'Tarnish Resistant'
-          ],
-          views: 89,
-          likes: 15,
-          stock: 0, // This product is out of stock
-          isAvailable: false,
-          tags: ['handmade', 'jewelry', 'gold-plated', 'traditional', 'ring'],
-          marketingContent: {
-            socialMediaPost: '✨ Handcrafted Gold Plated Ring - Traditional Indian jewelry at its finest! #HandmadeJewelry #GoldPlated',
-            targetAudience: 'Jewelry enthusiasts, traditional wear lovers, gift buyers'
-          }
-        };
-      } else {
-        // Default product with good stock
-        sampleProduct = {
-          _id: id,
+      // Define sample products with proper mapping
+      const sampleProducts = {
+        'sample1': {
+          _id: 'sample1',
           name: 'Traditional Blue Pottery Vase',
           description: 'Beautiful handcrafted vase with traditional Jaipur blue pottery design featuring intricate floral patterns',
-          aiEnhancedDescription: 'This exquisite handcrafted pottery piece embodies centuries of traditional Indian craftsmanship. Each curve and glaze tells a story of dedication, skill passed down through generations. Made with locally sourced clay and traditional firing techniques, this masterpiece represents the rich cultural heritage of Jaipur\'s pottery artisans. The deep blue color is achieved through natural mineral pigments, and the intricate floral patterns are hand-painted with precision that comes only from years of practice.',
           price: 1250,
           category: 'Pottery',
           images: ['https://via.placeholder.com/500x500/4A90E2/FFFFFF?text=Blue+Pottery+Vase'],
           artisan: {
-            _id: 'sample-artisan',
             name: 'Rajesh Kumar',
             location: { city: 'Jaipur', state: 'Rajasthan' },
-            craftType: 'Pottery',
-            story: 'Meet Rajesh Kumar, a passionate pottery artisan from Jaipur with over 15 years of experience. Growing up in a family of craftspeople, he learned the intricate techniques of blue pottery passed down through generations. Rajesh sources his clay from the Alwar region and uses traditional Persian techniques brought to India centuries ago. His workshop in the old city of Jaipur is where magic happens - each piece is individually crafted, painted, and fired with the utmost care.',
-            rating: 4.8
+            craftType: 'Pottery'
           },
-          materials: ['Premium Clay from Alwar', 'Natural Cobalt Blue Pigments', 'Traditional Lead-Free Glazes', 'Gold Accents'],
-          dimensions: { length: 15, width: 15, height: 25 },
-          craftingTime: '2 weeks (including drying time)',
-          features: [
-            'Handcrafted with Traditional Techniques',
-            '100% Natural Materials Used',
-            'Lead-Free Food Safe Glazes',
-            'Unique Artisan Signature Design',
-            'Dishwasher Safe (Hand wash recommended)'
-          ],
           views: 124,
           likes: 28,
-          stock: 8,
-          isAvailable: true,
-          tags: ['handmade', 'pottery', 'traditional', 'jaipur', 'blue-pottery', 'home-decor'],
-          marketingContent: {
-            socialMediaPost: '🎨 Discover authentic Jaipur Blue Pottery! ✨ Handcrafted Traditional Vase - where ancient Persian techniques meet Indian artistry. Perfect for your home! #HandmadeIndia #JaipurPottery',
-            targetAudience: 'Home decor enthusiasts, art collectors, cultural heritage lovers, mindful consumers'
-          }
-        };
-      }
+          stock: 7,
+          isAvailable: true
+        },
+        'sample2': {
+          _id: 'sample2',
+          name: 'Handwoven Banarasi Silk Saree',
+          description: 'Exquisite Banarasi silk saree with gold zari work, perfect for special occasions and celebrations',
+          price: 3500,
+          category: 'Textiles',
+          images: ['https://via.placeholder.com/500x500/E91E63/FFFFFF?text=Banarasi+Silk+Saree'],
+          artisan: {
+            name: 'Meera Devi',
+            location: { city: 'Varanasi', state: 'Uttar Pradesh' },
+            craftType: 'Weaving'
+          },
+          views: 89,
+          likes: 34,
+          stock: 6,
+          isAvailable: true
+        },
+        'sample3': {
+          _id: 'sample3',
+          name: 'Silver Kundan Jewelry Set',
+          description: 'Traditional Kundan jewelry set with intricate silver work and semi-precious stones',
+          price: 2800,
+          category: 'Jewelry',
+          images: ['https://via.placeholder.com/500x500/FFD700/000000?text=Kundan+Jewelry'],
+          artisan: {
+            name: 'Anita Sharma',
+            location: { city: 'Pushkar', state: 'Rajasthan' },
+            craftType: 'Jewelry'
+          },
+          views: 156,
+          likes: 42,
+          stock: 6,
+          isAvailable: true
+        },
+        'sample4': {
+          _id: 'sample4',
+          name: 'Carved Wooden Elephant Figurine',
+          description: 'Intricately carved wooden elephant with traditional Indian motifs, perfect for home decoration',
+          price: 890,
+          category: 'Woodwork',
+          images: ['https://via.placeholder.com/500x500/8B4513/FFFFFF?text=Wooden+Elephant'],
+          artisan: {
+            name: 'Ravi Kaul',
+            location: { city: 'Saharanpur', state: 'Uttar Pradesh' },
+            craftType: 'Woodwork'
+          },
+          views: 78,
+          likes: 19,
+          stock: 7,
+          isAvailable: true
+        },
+        'sample5': {
+          _id: 'sample5',
+          name: 'Brass Diya Set with Stand',
+          description: 'Authentic brass diya set with decorative stand, perfect for festivals and daily worship',
+          price: 450,
+          category: 'Metalwork',
+          images: ['https://via.placeholder.com/500x500/B8860B/FFFFFF?text=Brass+Diya+Set'],
+          artisan: {
+            name: 'Mohan Das',
+            location: { city: 'Moradabad', state: 'Uttar Pradesh' },
+            craftType: 'Metalwork'
+          },
+          views: 67,
+          likes: 22,
+          stock: 6,
+          isAvailable: true
+        },
+        'sample6': {
+          _id: 'sample6',
+          name: 'Madhubani Painting on Canvas',
+          description: 'Traditional Madhubani folk art painting depicting nature and mythology on canvas',
+          price: 1200,
+          category: 'Paintings',
+          images: ['https://via.placeholder.com/500x500/FF6347/FFFFFF?text=Madhubani+Art'],
+          artisan: {
+            name: 'Sunita Jha',
+            location: { city: 'Darbhanga', state: 'Bihar' },
+            craftType: 'Painting'
+          },
+          views: 102,
+          likes: 38,
+          stock: 7,
+          isAvailable: true
+        },
+        'sample7': {
+          _id: 'sample7',
+          name: 'Block Printed Cotton Bedsheet',
+          description: 'Hand block printed cotton bedsheet with traditional Rajasthani patterns in vibrant colors',
+          price: 750,
+          category: 'Textiles',
+          images: ['https://via.placeholder.com/500x500/32CD32/FFFFFF?text=Block+Print'],
+          artisan: {
+            name: 'Ramesh Chhipa',
+            location: { city: 'Sanganer', state: 'Rajasthan' },
+            craftType: 'Block Printing'
+          },
+          views: 93,
+          likes: 27,
+          stock: 6,
+          isAvailable: true
+        },
+        'sample8': {
+          _id: 'sample8',
+          name: 'Terracotta Garden Planters',
+          description: 'Set of handcrafted terracotta planters with traditional designs, perfect for garden and home',
+          price: 650,
+          category: 'Pottery',
+          images: ['https://via.placeholder.com/500x500/D2691E/FFFFFF?text=Terracotta+Planters'],
+          artisan: {
+            name: 'Kamala Kumhar',
+            location: { city: 'Khanapur', state: 'Gujarat' },
+            craftType: 'Pottery'
+          },
+          views: 85,
+          likes: 31,
+          stock: 7,
+          isAvailable: true
+        },
+        'sample9': {
+          _id: 'sample9',
+          name: 'Stone Carved Ganesha Statue',
+          description: 'Beautifully carved Lord Ganesha statue from red sandstone with intricate detailing',
+          price: 1800,
+          category: 'Sculptures',
+          images: ['https://via.placeholder.com/500x500/708090/FFFFFF?text=Ganesha+Statue'],
+          artisan: {
+            name: 'Vishnu Sharma',
+            location: { city: 'Mathura', state: 'Uttar Pradesh' },
+            craftType: 'Stone Carving'
+          },
+          views: 78,
+          likes: 29,
+          stock: 7,
+          isAvailable: true
+        },
+        'sample10': {
+          _id: 'sample10',
+          name: 'Handwoven Khadi Cotton Kurta',
+          description: 'Premium Khadi cotton kurta with traditional hand-spun fabric, comfortable for daily wear',
+          price: 950,
+          category: 'Textiles',
+          images: ['https://via.placeholder.com/500x500/F0E68C/000000?text=Khadi+Kurta'],
+          artisan: {
+            name: 'Govind Weaver',
+            location: { city: 'Ahmedabad', state: 'Gujarat' },
+            craftType: 'Weaving'
+          },
+          views: 67,
+          likes: 18,
+          stock: 2,
+          isAvailable: true
+        }
+      };
+      
+      // Get the sample product or create a generic one
+      sampleProduct = sampleProducts[id] || {
+        _id: id,
+        name: 'Artisan Craft Product',
+        description: 'Beautiful handcrafted item made by skilled artisans',
+        price: 999,
+        category: 'Crafts',
+        images: ['https://via.placeholder.com/500x500/667eea/FFFFFF?text=Artisan+Product'],
+        artisan: {
+          name: 'Local Artisan',
+          location: { city: 'Various', state: 'India' },
+          craftType: 'Traditional Craft'
+        },
+        views: 50,
+        likes: 10,
+        stock: 5,
+        isAvailable: true
+      };
+      
+      // Add enhanced details for product detail page
+      sampleProduct = {
+        ...sampleProduct,
+        aiEnhancedDescription: sampleProduct.description + ' This beautiful piece represents the rich cultural heritage of Indian craftsmanship.',
+        materials: ['Traditional Materials', 'Natural Components', 'Handcrafted Elements'],
+        dimensions: { length: 20, width: 15, height: 10 },
+        craftingTime: '1-2 weeks',
+        features: [
+          'Handcrafted with Traditional Techniques',
+          '100% Authentic Materials Used',
+          'Unique Artisan Design',
+          'Cultural Heritage Item'
+        ],
+        tags: ['handmade', 'traditional', 'authentic', 'cultural'],
+        marketingContent: {
+          socialMediaPost: `✨ Beautiful ${sampleProduct.name} - Authentic Indian craftsmanship! #HandmadeIndia #TraditionalCrafts`,
+          targetAudience: 'Art enthusiasts, cultural heritage lovers, traditional craft collectors'
+        }
+      };
       
       console.log('Setting sample product:', sampleProduct.name, 'Stock:', sampleProduct.stock, 'Available:', sampleProduct.isAvailable);
       setProduct(sampleProduct);

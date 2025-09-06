@@ -9,13 +9,8 @@ class CartController {
     try {
       const userId = req.user.id;
       
-      let cart = await Cart.findOne({ userId }).populate({
-        path: 'items.variantId',
-        populate: {
-          path: 'artisan',
-          select: 'name location'
-        }
-      });
+      // First get cart without population to handle sample products
+      let cart = await Cart.findOne({ userId });
 
       if (!cart) {
         cart = await Cart.findOrCreateCart(userId);
@@ -27,12 +22,177 @@ class CartController {
         await cart.save();
       }
 
+      // Define sample products for demo (same as in addOrUpdateItem)
+      const sampleProducts = {
+        'sample1': {
+          _id: 'sample1',
+          name: 'Traditional Blue Pottery Vase',
+          price: 1250,
+          category: 'Pottery',
+          images: ['https://via.placeholder.com/400x400/4A90E2/FFFFFF?text=Blue+Pottery+Vase'],
+          quantityAvailable: 7,
+          isActive: true,
+          isOutOfStock: false,
+          artisan: {
+            name: 'Rajesh Kumar',
+            location: { city: 'Jaipur', state: 'Rajasthan' }
+          }
+        },
+        'sample2': {
+          _id: 'sample2',
+          name: 'Handwoven Banarasi Silk Saree',
+          price: 3500,
+          category: 'Textiles',
+          images: ['https://via.placeholder.com/400x400/E91E63/FFFFFF?text=Banarasi+Silk+Saree'],
+          quantityAvailable: 6,
+          isActive: true,
+          isOutOfStock: false,
+          artisan: {
+            name: 'Meera Devi',
+            location: { city: 'Varanasi', state: 'Uttar Pradesh' }
+          }
+        },
+        'sample3': {
+          _id: 'sample3',
+          name: 'Silver Kundan Jewelry Set',
+          price: 2800,
+          category: 'Jewelry',
+          images: ['https://via.placeholder.com/400x400/FFD700/000000?text=Kundan+Jewelry'],
+          quantityAvailable: 6,
+          isActive: true,
+          isOutOfStock: false,
+          artisan: {
+            name: 'Anita Sharma',
+            location: { city: 'Pushkar', state: 'Rajasthan' }
+          }
+        },
+        'sample4': {
+          _id: 'sample4',
+          name: 'Carved Wooden Elephant Figurine',
+          price: 890,
+          category: 'Woodwork',
+          images: ['https://via.placeholder.com/400x400/8B4513/FFFFFF?text=Wooden+Elephant'],
+          quantityAvailable: 7,
+          isActive: true,
+          isOutOfStock: false,
+          artisan: {
+            name: 'Ravi Kaul',
+            location: { city: 'Saharanpur', state: 'Uttar Pradesh' }
+          }
+        },
+        'sample5': {
+          _id: 'sample5',
+          name: 'Brass Diya Set with Stand',
+          price: 450,
+          category: 'Metalwork',
+          images: ['https://via.placeholder.com/400x400/B8860B/FFFFFF?text=Brass+Diya+Set'],
+          quantityAvailable: 6,
+          isActive: true,
+          isOutOfStock: false,
+          artisan: {
+            name: 'Mohan Das',
+            location: { city: 'Moradabad', state: 'Uttar Pradesh' }
+          }
+        },
+        'sample6': {
+          _id: 'sample6',
+          name: 'Madhubani Painting on Canvas',
+          price: 1200,
+          category: 'Paintings',
+          images: ['https://via.placeholder.com/400x400/FF6347/FFFFFF?text=Madhubani+Art'],
+          quantityAvailable: 7,
+          isActive: true,
+          isOutOfStock: false,
+          artisan: {
+            name: 'Sunita Jha',
+            location: { city: 'Darbhanga', state: 'Bihar' }
+          }
+        },
+        'sample7': {
+          _id: 'sample7',
+          name: 'Block Printed Cotton Bedsheet',
+          price: 750,
+          category: 'Textiles',
+          images: ['https://via.placeholder.com/400x400/32CD32/FFFFFF?text=Block+Print'],
+          quantityAvailable: 6,
+          isActive: true,
+          isOutOfStock: false,
+          artisan: {
+            name: 'Ramesh Chhipa',
+            location: { city: 'Sanganer', state: 'Rajasthan' }
+          }
+        },
+        'sample8': {
+          _id: 'sample8',
+          name: 'Terracotta Garden Planters',
+          price: 650,
+          category: 'Pottery',
+          images: ['https://via.placeholder.com/400x400/D2691E/FFFFFF?text=Terracotta+Planters'],
+          quantityAvailable: 7,
+          isActive: true,
+          isOutOfStock: false,
+          artisan: {
+            name: 'Kamala Kumhar',
+            location: { city: 'Khanapur', state: 'Gujarat' }
+          }
+        },
+        'sample9': {
+          _id: 'sample9',
+          name: 'Stone Carved Ganesha Statue',
+          price: 1800,
+          category: 'Sculptures',
+          images: ['https://via.placeholder.com/400x400/708090/FFFFFF?text=Ganesha+Statue'],
+          quantityAvailable: 7,
+          isActive: true,
+          isOutOfStock: false,
+          artisan: {
+            name: 'Vishnu Sharma',
+            location: { city: 'Mathura', state: 'Uttar Pradesh' }
+          }
+        },
+        'sample10': {
+          _id: 'sample10',
+          name: 'Handwoven Khadi Cotton Kurta',
+          price: 950,
+          category: 'Textiles',
+          images: ['https://via.placeholder.com/400x400/F0E68C/000000?text=Khadi+Kurta'],
+          quantityAvailable: 2,
+          isActive: true,
+          isOutOfStock: false,
+          artisan: {
+            name: 'Govind Weaver',
+            location: { city: 'Ahmedabad', state: 'Gujarat' }
+          }
+        }
+      };
+
       // Validate items and update prices if needed
       const validatedItems = [];
       let hasChanges = false;
 
       for (const item of cart.items) {
-        const product = item.variantId;
+        let product;
+        
+        // Check if it's a sample product first
+        if (item.variantId && typeof item.variantId === 'string' && item.variantId.startsWith('sample')) {
+          product = sampleProducts[item.variantId];
+          if (product) {
+            // Add required methods for sample products
+            product.isQuantityAvailable = (qty) => product.quantityAvailable >= qty && product.isActive && !product.isOutOfStock;
+            product.lowStockThreshold = 2;
+          }
+        } else {
+          // Try to get actual product from database
+          try {
+            product = await Product.findById(item.variantId).populate({
+              path: 'artisan',
+              select: 'name location'
+            });
+          } catch (error) {
+            console.log('Error finding product in database:', error.message);
+            product = null;
+          }
+        }
         
         if (!product || !product.isActive) {
           // Remove inactive products
@@ -156,7 +316,181 @@ class CartController {
 
       // Validate product exists and get current price
       console.log('Finding product:', variantId);
-      const product = await Product.findById(variantId).populate('artisan');
+      let product;
+      
+      // Handle sample products first (they don't have valid ObjectId format)
+      if (variantId.startsWith('sample')) {
+        console.log('Sample product detected, skipping database lookup');
+        product = null; // Will trigger sample product logic below
+      } else {
+        try {
+          product = await Product.findById(variantId).populate('artisan');
+        } catch (error) {
+          console.log('Error finding product in database:', error.message);
+          product = null;
+        }
+      }
+      
+      // If product not found in database, check for sample products
+      if (!product && variantId.startsWith('sample')) {
+        console.log('Product not found in DB, checking sample products:', variantId);
+        
+        // Define sample products for demo
+        const sampleProducts = {
+          'sample1': {
+            _id: 'sample1',
+            name: 'Traditional Blue Pottery Vase',
+            price: 1250,
+            category: 'Pottery',
+            images: ['https://via.placeholder.com/400x400/4A90E2/FFFFFF?text=Blue+Pottery+Vase'],
+            quantityAvailable: 7,
+            isActive: true,
+            isOutOfStock: false,
+            artisan: {
+              name: 'Rajesh Kumar',
+              location: { city: 'Jaipur', state: 'Rajasthan' }
+            }
+          },
+          'sample2': {
+            _id: 'sample2',
+            name: 'Handwoven Banarasi Silk Saree',
+            price: 3500,
+            category: 'Textiles',
+            images: ['https://via.placeholder.com/400x400/E91E63/FFFFFF?text=Banarasi+Silk+Saree'],
+            quantityAvailable: 6,
+            isActive: true,
+            isOutOfStock: false,
+            artisan: {
+              name: 'Meera Devi',
+              location: { city: 'Varanasi', state: 'Uttar Pradesh' }
+            }
+          },
+          'sample3': {
+            _id: 'sample3',
+            name: 'Silver Kundan Jewelry Set',
+            price: 2800,
+            category: 'Jewelry',
+            images: ['https://via.placeholder.com/400x400/FFD700/000000?text=Kundan+Jewelry'],
+            quantityAvailable: 6,
+            isActive: true,
+            isOutOfStock: false,
+            artisan: {
+              name: 'Anita Sharma',
+              location: { city: 'Pushkar', state: 'Rajasthan' }
+            }
+          },
+          'sample4': {
+            _id: 'sample4',
+            name: 'Carved Wooden Elephant Figurine',
+            price: 890,
+            category: 'Woodwork',
+            images: ['https://via.placeholder.com/400x400/8B4513/FFFFFF?text=Wooden+Elephant'],
+            quantityAvailable: 7,
+            isActive: true,
+            isOutOfStock: false,
+            artisan: {
+              name: 'Ravi Kaul',
+              location: { city: 'Saharanpur', state: 'Uttar Pradesh' }
+            }
+          },
+          'sample5': {
+            _id: 'sample5',
+            name: 'Brass Diya Set with Stand',
+            price: 450,
+            category: 'Metalwork',
+            images: ['https://via.placeholder.com/400x400/B8860B/FFFFFF?text=Brass+Diya+Set'],
+            quantityAvailable: 6,
+            isActive: true,
+            isOutOfStock: false,
+            artisan: {
+              name: 'Mohan Das',
+              location: { city: 'Moradabad', state: 'Uttar Pradesh' }
+            }
+          },
+          'sample6': {
+            _id: 'sample6',
+            name: 'Madhubani Painting on Canvas',
+            price: 1200,
+            category: 'Paintings',
+            images: ['https://via.placeholder.com/400x400/FF6347/FFFFFF?text=Madhubani+Art'],
+            quantityAvailable: 7,
+            isActive: true,
+            isOutOfStock: false,
+            artisan: {
+              name: 'Sunita Jha',
+              location: { city: 'Darbhanga', state: 'Bihar' }
+            }
+          },
+          'sample7': {
+            _id: 'sample7',
+            name: 'Block Printed Cotton Bedsheet',
+            price: 750,
+            category: 'Textiles',
+            images: ['https://via.placeholder.com/400x400/32CD32/FFFFFF?text=Block+Print'],
+            quantityAvailable: 6,
+            isActive: true,
+            isOutOfStock: false,
+            artisan: {
+              name: 'Ramesh Chhipa',
+              location: { city: 'Sanganer', state: 'Rajasthan' }
+            }
+          },
+          'sample8': {
+            _id: 'sample8',
+            name: 'Terracotta Garden Planters',
+            price: 650,
+            category: 'Pottery',
+            images: ['https://via.placeholder.com/400x400/D2691E/FFFFFF?text=Terracotta+Planters'],
+            quantityAvailable: 7,
+            isActive: true,
+            isOutOfStock: false,
+            artisan: {
+              name: 'Kamala Kumhar',
+              location: { city: 'Khanapur', state: 'Gujarat' }
+            }
+          },
+          'sample9': {
+            _id: 'sample9',
+            name: 'Stone Carved Ganesha Statue',
+            price: 1800,
+            category: 'Sculptures',
+            images: ['https://via.placeholder.com/400x400/708090/FFFFFF?text=Ganesha+Statue'],
+            quantityAvailable: 7,
+            isActive: true,
+            isOutOfStock: false,
+            artisan: {
+              name: 'Vishnu Sharma',
+              location: { city: 'Mathura', state: 'Uttar Pradesh' }
+            }
+          },
+          'sample10': {
+            _id: 'sample10',
+            name: 'Handwoven Khadi Cotton Kurta',
+            price: 950,
+            category: 'Textiles',
+            images: ['https://via.placeholder.com/400x400/F0E68C/000000?text=Khadi+Kurta'],
+            quantityAvailable: 2,
+            isActive: true,
+            isOutOfStock: false,
+            artisan: {
+              name: 'Govind Weaver',
+              location: { city: 'Ahmedabad', state: 'Gujarat' }
+            }
+          }
+        };
+        
+        const sampleProduct = sampleProducts[variantId];
+        if (sampleProduct) {
+          console.log('Using sample product:', sampleProduct.name);
+          // Create a mock product object with required methods
+          product = {
+            ...sampleProduct,
+            isQuantityAvailable: (qty) => sampleProduct.quantityAvailable >= qty && sampleProduct.isActive && !sampleProduct.isOutOfStock,
+            lowStockThreshold: 2
+          };
+        }
+      }
+      
       if (!product) {
         console.log('Product not found:', variantId);
         return res.status(404).json(ErrorResponse.notFound('Product not found'));
