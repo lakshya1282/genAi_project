@@ -32,6 +32,8 @@ import CartErrorBoundary from './components/CartErrorBoundary';
 import CustomerAIAssistant from './components/CustomerAIAssistant';
 import ArtisanAIAssistant from './components/ArtisanAIAssistant';
 import ProductSearchChatbot from './components/ProductSearchChatbot';
+import OAuthCallbackHandler from './components/OAuthCallbackHandler';
+import CompleteProfile from './pages/CompleteProfile';
 import './App.css';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -57,6 +59,10 @@ function App() {
               {/* Customer Routes */}
               <Route path="/customer/login" element={<CustomerLogin />} />
               <Route path="/customer/register" element={<CustomerRegister />} />
+              
+              {/* Google OAuth Routes */}
+              <Route path="/oauth/callback" element={<OAuthCallbackHandler />} />
+              <Route path="/complete-profile" element={<CompleteProfile />} />
               <Route path="/cart" element={
                 <CartErrorBoundary>
                   <Cart />

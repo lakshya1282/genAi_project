@@ -48,7 +48,10 @@
     "areYouArtisan": "Are you an artisan?",
     "wantToSell": "Want to sell your crafts?",
     "joinAsCustomer": "Join as Customer",
-    "joinAsArtisan": "Join as Artisan"
+    "joinAsArtisan": "Join as Artisan",
+    "signInWithGoogle": "Sign in with Google",
+    "signUpWithGoogle": "Sign up with Google",
+    "continueWithGoogle": "Continue with Google"
   },
   "home": {
     "hero": {

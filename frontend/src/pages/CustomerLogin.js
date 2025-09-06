@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext';
 import { toast } from 'react-toastify';
+import GoogleAuthButton from '../components/GoogleAuthButton';
 import './Auth.css';
 
 const CustomerLogin = () => {
@@ -48,6 +49,15 @@ const CustomerLogin = () => {
         </div>
 
         <form className="auth-form" onSubmit={handleSubmit}>
+          {/* Google OAuth Button */}
+          <GoogleAuthButton 
+            text={t('auth.signInWithGoogle') || "Sign in with Google"} 
+            userType="user"
+            disabled={loading}
+          />
+          
+          <div className="auth-divider">or</div>
+          
           <div className="form-group">
             <label htmlFor="email">{t('auth.email')}</label>
             <input

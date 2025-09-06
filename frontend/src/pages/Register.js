@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { toast } from 'react-toastify';
 import OTPVerification from '../components/OTPVerification';
+import GoogleAuthButton from '../components/GoogleAuthButton';
 import './Auth.css';
 
 const Register = () => {
@@ -124,6 +125,15 @@ const Register = () => {
             </div>
 
             <form onSubmit={handleSubmit} className="auth-form">
+              {/* Google OAuth Button */}
+              <GoogleAuthButton 
+                text="Sign up with Google" 
+                userType="artisan"
+                disabled={loading}
+              />
+              
+              <div className="auth-divider">or</div>
+              
               <div className="form-row">
                 <div className="form-group">
                   <label className="form-label">Full Name</label>

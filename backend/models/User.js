@@ -21,12 +21,31 @@ const userSchema = new mongoose.Schema({
   },
   password: {
     type: String,
-    required: true,
+    required: function() {
+      return !this.googleId; // Password not required if using Google OAuth
+    },
     minlength: 6
+  },
+  // Google OAuth fields
+  googleId: {
+    type: String,
+    sparse: true // Allow null values but enforce uniqueness when present
+  },
+  authProvider: {
+    type: String,
+    enum: ['local', 'google'],
+    default: 'local'
+  },
+  picture: {
+    type: String // Google profile picture URL
   },
   phone: {
     type: String,
-    required: true
+    required: function() {
+      // Phone not required for Google OAuth users initially
+      // They can add it later in profile completion
+      return !this.googleId;
+    }
   },
   addresses: [{
     type: {
@@ -117,5 +136,8 @@ const userSchema = new mongoose.Schema({
 }, {
   timestamps: true
 });
+
+// Create index for Google OAuth users
+userSchema.index({ googleId: 1 }, { unique: true, sparse: true });
 
 module.exports = mongoose.model('User', userSchema);

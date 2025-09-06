@@ -217,7 +217,9 @@ router.post('/login', async (req, res) => {
         name: record.name,
         email: record.email,
         phone: record.phone,
-        isEmailVerified: record.isEmailVerified
+        isEmailVerified: record.isEmailVerified,
+        authProvider: record.authProvider || 'local',
+        picture: record.picture || record.profileImage
       };
     } else {
       responseData.artisan = {

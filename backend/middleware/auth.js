@@ -31,7 +31,13 @@ const auth = async (req, res, next) => {
       userType: 'customer', // All users in this model are customers
       id: userId, // For compatibility
       name: user.name,
-      email: user.email
+      email: user.email,
+      authProvider: user.authProvider || 'local',
+      picture: user.picture || user.profileImage,
+      phone: user.phone,
+      addresses: user.addresses,
+      preferences: user.preferences,
+      createdAt: user.createdAt
     };
     
     next();

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { toast } from 'react-toastify';
+import GoogleAuthButton from '../components/GoogleAuthButton';
 import './Auth.css';
 
 const Login = () => {
@@ -47,6 +48,15 @@ const Login = () => {
             </div>
 
             <form onSubmit={handleSubmit} className="auth-form">
+              {/* Google OAuth Button */}
+              <GoogleAuthButton 
+                text="Sign in with Google" 
+                userType="artisan"
+                disabled={loading}
+              />
+              
+              <div className="auth-divider">or</div>
+              
               <div className="form-group">
                 <label className="form-label">Email Address</label>
                 <input

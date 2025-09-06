@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext';
 import { toast } from 'react-toastify';
 import OTPVerification from '../components/OTPVerification';
+import GoogleAuthButton from '../components/GoogleAuthButton';
 import './Auth.css';
 
 const CustomerRegister = () => {
@@ -119,6 +120,15 @@ const CustomerRegister = () => {
         </div>
 
         <form className="auth-form" onSubmit={handleSubmit}>
+          {/* Google OAuth Button */}
+          <GoogleAuthButton 
+            text={t('auth.signUpWithGoogle') || "Sign up with Google"} 
+            userType="user"
+            disabled={loading}
+          />
+          
+          <div className="auth-divider">or</div>
+          
           <div className="form-group">
             <label htmlFor="name">{t('auth.name')}</label>
             <input
