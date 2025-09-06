@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { toast } from 'react-toastify';
+import OTPVerification from '../components/OTPVerification';
 import './Auth.css';
 
 const Register = () => {
@@ -16,7 +17,10 @@ const Register = () => {
     bio: ''
   });
   const [loading, setLoading] = useState(false);
-  const { register } = useAuth();
+  const [showOTPVerification, setShowOTPVerification] = useState(false);
+  const [verificationEmail, setVerificationEmail] = useState('');
+  const [expiresIn, setExpiresIn] = useState(10);
+  const { login } = useAuth();
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -31,7 +35,12 @@ const Register = () => {
     setLoading(true);
 
     const userData = {
-      ...formData,
+      name: formData.name,
+      email: formData.email,
+      password: formData.password,
+      phone: formData.phone,
+      craftType: formData.craftType,
+      bio: formData.bio,
       location: {
         city: formData.city,
         state: formData.state,
@@ -39,17 +48,70 @@ const Register = () => {
       }
     };
 
-    const result = await register(userData);
-    
-    if (result.success) {
-      toast.success('Registration successful! Welcome to ArtisanAI!');
-      navigate('/dashboard');
-    } else {
-      toast.error(result.message);
+    try {
+      const response = await fetch('/api/artisans/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(userData)
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        setVerificationEmail(data.email);
+        setExpiresIn(data.expiresIn || 10);
+        setShowOTPVerification(true);
+        toast.success('Verification code sent! Please check your email.');
+      } else {
+        toast.error(data.message || 'Registration failed');
+      }
+    } catch (error) {
+      console.error('Registration error:', error);
+      toast.error('Network error. Please try again.');
+    } finally {
+      setLoading(false);
     }
-    
-    setLoading(false);
   };
+
+  const handleVerificationSuccess = async (data) => {
+    if (data.token) {
+      // Store token and artisan data
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('userType', 'artisan');
+      
+      if (data.artisan) {
+        localStorage.setItem('userData', JSON.stringify(data.artisan));
+      }
+
+      // Update auth context if needed
+      if (login) {
+        await login(data.artisan, data.token, 'artisan');
+      }
+
+      toast.success('Account verified successfully! Welcome to ArtisanAI!');
+      navigate('/dashboard');
+    }
+  };
+
+  const handleBackToRegistration = () => {
+    setShowOTPVerification(false);
+    setVerificationEmail('');
+  };
+
+  // Show OTP verification if needed
+  if (showOTPVerification) {
+    return (
+      <OTPVerification
+        email={verificationEmail}
+        userType="artisan"
+        onVerificationSuccess={handleVerificationSuccess}
+        onBack={handleBackToRegistration}
+        expiresIn={expiresIn}
+      />
+    );
+  }
 
   return (
     <div className="auth-page">

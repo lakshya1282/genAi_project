@@ -2,55 +2,148 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const Artisan = require('../models/Artisan');
+const emailVerificationService = require('../services/emailVerificationService');
 const router = express.Router();
 
-// Register artisan
+// Step 1: Register artisan (send OTP)
 router.post('/register', async (req, res) => {
   try {
     const { name, email, password, phone, location, craftType, bio } = req.body;
 
-    // Check if artisan already exists
-    const existingArtisan = await Artisan.findOne({ email });
-    if (existingArtisan) {
-      return res.status(400).json({ message: 'Artisan already exists with this email' });
+    // Validate required fields
+    if (!name || !email || !password) {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'Name, email, and password are required' 
+      });
     }
 
-    // Hash password
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'Please enter a valid email address' 
+      });
+    }
+
+    // Validate password length
+    if (password.length < 6) {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'Password must be at least 6 characters long' 
+      });
+    }
+
+    // Hash password for temporary storage
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    // Create new artisan
-    const artisan = new Artisan({
-      name,
-      email,
+    // Prepare artisan data for temporary storage
+    const userData = {
+      name: name.trim(),
       password: hashedPassword,
-      phone,
-      location,
-      craftType,
-      bio
-    });
+      phone: phone ? phone.trim() : '',
+      location: location || {},
+      craftType: craftType || '',
+      bio: bio ? bio.trim() : ''
+    };
 
-    await artisan.save();
-
-    // Generate JWT token
-    const token = jwt.sign(
-      { id: artisan._id, userType: 'artisan' },
-      process.env.JWT_SECRET || 'fallback_secret',
-      { expiresIn: '7d' }
+    // Send OTP via email verification service
+    const result = await emailVerificationService.sendVerificationOTP(
+      email.toLowerCase().trim(), 
+      'artisan', 
+      userData
     );
 
-    res.status(201).json({
-      message: 'Artisan registered successfully',
-      token,
-      artisan: {
-        id: artisan._id,
-        name: artisan.name,
-        email: artisan.email,
-        craftType: artisan.craftType
-      }
-    });
+    if (result.success) {
+      res.status(200).json({
+        success: true,
+        message: result.message,
+        requiresVerification: true,
+        email: email.toLowerCase().trim(),
+        expiresIn: result.expiresIn
+      });
+    } else {
+      res.status(400).json({
+        success: false,
+        message: result.message
+      });
+    }
   } catch (error) {
-    res.status(500).json({ message: 'Server error', error: error.message });
+    console.error('Artisan registration error:', error);
+    res.status(500).json({ 
+      success: false, 
+      message: 'Error processing registration', 
+      error: error.message 
+    });
+  }
+});
+
+// Step 2: Verify OTP and complete artisan registration
+router.post('/verify-email', async (req, res) => {
+  try {
+    const { email, otp } = req.body;
+
+    // Validate required fields
+    if (!email || !otp) {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'Email and verification code are required' 
+      });
+    }
+
+    // Verify OTP and complete registration
+    const result = await emailVerificationService.verifyOTP(
+      email.toLowerCase().trim(), 
+      otp.trim(), 
+      'artisan'
+    );
+
+    if (result.success) {
+      res.status(201).json(result);
+    } else {
+      res.status(400).json(result);
+    }
+  } catch (error) {
+    console.error('Artisan email verification error:', error);
+    res.status(500).json({ 
+      success: false, 
+      message: 'Error verifying email', 
+      error: error.message 
+    });
+  }
+});
+
+// Resend verification OTP for artisan
+router.post('/resend-verification', async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    if (!email) {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'Email is required' 
+      });
+    }
+
+    const result = await emailVerificationService.resendVerificationOTP(
+      email.toLowerCase().trim(), 
+      'artisan'
+    );
+
+    if (result.success) {
+      res.status(200).json(result);
+    } else {
+      res.status(400).json(result);
+    }
+  } catch (error) {
+    console.error('Artisan resend verification error:', error);
+    res.status(500).json({ 
+      success: false, 
+      message: 'Error resending verification code', 
+      error: error.message 
+    });
   }
 });
 

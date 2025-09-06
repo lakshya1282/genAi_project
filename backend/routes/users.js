@@ -5,6 +5,7 @@ const User = require('../models/User');
 const Product = require('../models/Product');
 const Order = require('../models/Order');
 const notificationService = require('../services/notificationService');
+const emailVerificationService = require('../services/emailVerificationService');
 
 const router = express.Router();
 
@@ -25,51 +26,142 @@ const verifyToken = (req, res, next) => {
   }
 };
 
-// Register new user
+// Step 1: Register new user (send OTP)
 router.post('/register', async (req, res) => {
   try {
     const { name, email, password, phone } = req.body;
 
-    // Check if user already exists
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
-      return res.status(400).json({ message: 'User already exists with this email' });
+    // Validate required fields
+    if (!name || !email || !password || !phone) {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'All fields are required' 
+      });
     }
 
-    // Hash password
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'Please enter a valid email address' 
+      });
+    }
+
+    // Validate password length
+    if (password.length < 6) {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'Password must be at least 6 characters long' 
+      });
+    }
+
+    // Hash password for temporary storage
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    // Create user
-    const user = new User({
-      name,
-      email,
+    // Prepare user data for temporary storage
+    const userData = {
+      name: name.trim(),
       password: hashedPassword,
-      phone
-    });
+      phone: phone.trim()
+    };
 
-    await user.save();
-
-    // Generate JWT token
-    const token = jwt.sign(
-      { id: user._id, email: user.email, type: 'user' },
-      process.env.JWT_SECRET,
-      { expiresIn: '7d' }
+    // Send OTP via email verification service
+    const result = await emailVerificationService.sendVerificationOTP(
+      email.toLowerCase().trim(), 
+      'user', 
+      userData
     );
 
-    res.status(201).json({
-      success: true,
-      message: 'User registered successfully',
-      token,
-      user: {
-        id: user._id,
-        name: user.name,
-        email: user.email,
-        phone: user.phone
-      }
-    });
+    if (result.success) {
+      res.status(200).json({
+        success: true,
+        message: result.message,
+        requiresVerification: true,
+        email: email.toLowerCase().trim(),
+        expiresIn: result.expiresIn
+      });
+    } else {
+      res.status(400).json({
+        success: false,
+        message: result.message
+      });
+    }
   } catch (error) {
-    res.status(500).json({ message: 'Error registering user', error: error.message });
+    console.error('Registration error:', error);
+    res.status(500).json({ 
+      success: false, 
+      message: 'Error processing registration', 
+      error: error.message 
+    });
+  }
+});
+
+// Step 2: Verify OTP and complete registration
+router.post('/verify-email', async (req, res) => {
+  try {
+    const { email, otp } = req.body;
+
+    // Validate required fields
+    if (!email || !otp) {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'Email and verification code are required' 
+      });
+    }
+
+    // Verify OTP and complete registration
+    const result = await emailVerificationService.verifyOTP(
+      email.toLowerCase().trim(), 
+      otp.trim(), 
+      'user'
+    );
+
+    if (result.success) {
+      res.status(201).json(result);
+    } else {
+      res.status(400).json(result);
+    }
+  } catch (error) {
+    console.error('Email verification error:', error);
+    res.status(500).json({ 
+      success: false, 
+      message: 'Error verifying email', 
+      error: error.message 
+    });
+  }
+});
+
+// Resend verification OTP
+router.post('/resend-verification', async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    if (!email) {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'Email is required' 
+      });
+    }
+
+    const result = await emailVerificationService.resendVerificationOTP(
+      email.toLowerCase().trim(), 
+      'user'
+    );
+
+    if (result.success) {
+      res.status(200).json(result);
+    } else {
+      res.status(400).json(result);
+    }
+  } catch (error) {
+    console.error('Resend verification error:', error);
+    res.status(500).json({ 
+      success: false, 
+      message: 'Error resending verification code', 
+      error: error.message 
+    });
   }
 });
 

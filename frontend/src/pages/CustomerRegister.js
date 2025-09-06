@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext';
 import { toast } from 'react-toastify';
+import OTPVerification from '../components/OTPVerification';
 import './Auth.css';
 
 const CustomerRegister = () => {
@@ -15,8 +16,11 @@ const CustomerRegister = () => {
     phone: ''
   });
   const [loading, setLoading] = useState(false);
+  const [showOTPVerification, setShowOTPVerification] = useState(false);
+  const [verificationEmail, setVerificationEmail] = useState('');
+  const [expiresIn, setExpiresIn] = useState(10);
   
-  const { register } = useAuth();
+  const { login } = useAuth();
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -36,22 +40,75 @@ const CustomerRegister = () => {
 
     setLoading(true);
 
-    const result = await register({
-      name: formData.name,
-      email: formData.email,
-      password: formData.password,
-      phone: formData.phone
-    }, 'customer');
-    
-    if (result.success) {
-      toast.success(t('auth.accountCreated'));
-      navigate('/marketplace');
-    } else {
-      toast.error(result.message);
+    try {
+      const response = await fetch('/api/users/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          password: formData.password,
+          phone: formData.phone
+        })
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        setVerificationEmail(data.email);
+        setExpiresIn(data.expiresIn || 10);
+        setShowOTPVerification(true);
+        toast.success('Verification code sent! Please check your email.');
+      } else {
+        toast.error(data.message || 'Registration failed');
+      }
+    } catch (error) {
+      console.error('Registration error:', error);
+      toast.error('Network error. Please try again.');
+    } finally {
+      setLoading(false);
     }
-    
-    setLoading(false);
   };
+
+  const handleVerificationSuccess = async (data) => {
+    if (data.token) {
+      // Store token and user data
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('userType', 'user');
+      
+      if (data.user) {
+        localStorage.setItem('userData', JSON.stringify(data.user));
+      }
+
+      // Update auth context if needed
+      if (login) {
+        await login(data.user, data.token, 'user');
+      }
+
+      toast.success('Account verified successfully! Welcome to ArtisanAI!');
+      navigate('/marketplace');
+    }
+  };
+
+  const handleBackToRegistration = () => {
+    setShowOTPVerification(false);
+    setVerificationEmail('');
+  };
+
+  // Show OTP verification if needed
+  if (showOTPVerification) {
+    return (
+      <OTPVerification
+        email={verificationEmail}
+        userType="user"
+        onVerificationSuccess={handleVerificationSuccess}
+        onBack={handleBackToRegistration}
+        expiresIn={expiresIn}
+      />
+    );
+  }
 
   return (
     <div className="auth-container">
@@ -134,7 +191,14 @@ const CustomerRegister = () => {
             className="auth-button"
             disabled={loading}
           >
-            {loading ? t('auth.creatingAccount') : t('auth.createAccount')}
+            {loading ? (
+              <>
+                <span className="spinner"></span>
+                {t('auth.creatingAccount')}
+              </>
+            ) : (
+              t('auth.createAccount')
+            )}
           </button>
         </form>
 

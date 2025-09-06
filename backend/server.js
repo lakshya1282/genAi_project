@@ -28,6 +28,7 @@ const connectDB = async () => {
 };
 
 // Routes
+app.use('/api/auth', require('./routes/auth'));
 app.use('/api/artisans', require('./routes/artisans'));
 app.use('/api/ai', require('./routes/ai'));
 app.use('/api/ai-assistant', require('./routes/aiAssistant'));
