@@ -268,24 +268,7 @@ export const AuthProvider = ({ children }) => {
       const response = await axios.post('/api/cart/items', requestData);
       
       if (response.data.success) {
-        // Update local state immediately for responsive UI
-        const updatedCart = cart.map(item => {
-          const isMatch = item._id === itemId || item.product?._id === itemId;
-          
-          if (isMatch) {
-            return {
-              ...item,
-              quantity: quantity,
-              itemTotal: item.product.price * quantity
-            };
-          }
-          return item;
-        });
-        
-        setCart([...updatedCart]);
-        setCartLastUpdated(Date.now());
-        
-        // Reload cart for consistency
+        // Reload cart for consistency (this will handle both cart state and cartLastUpdated)
         await loadCart();
         
         return { success: true, message: response.data.message || 'Cart updated successfully' };

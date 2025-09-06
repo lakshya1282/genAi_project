@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext';
@@ -10,41 +10,40 @@ import './Cart.css';
 
 const Cart = () => {
   const { t } = useTranslation();
-  const { cart, cartCount, removeFromCart, updateCartQuantity, userType, user, cartLastUpdated } = useAuth();
-  const [cartSummary, setCartSummary] = useState(null);
+  const { cart, cartCount, removeFromCart, updateCartQuantity, userType, user } = useAuth();
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
+  // Calculate cart summary using useMemo to prevent unnecessary recalculations
+  const cartSummary = useMemo(() => {
+    if (!cart || cart.length === 0) {
+      return null;
+    }
 
+    try {
+      return calculateCartSummary(cart);
+    } catch (error) {
+      console.error('Error calculating cart summary:', error);
+      // Return a default summary to prevent crashes
+      return {
+        subtotal: 0,
+        shippingCost: 100,
+        tax: 0,
+        total: 100,
+        totalItems: 0,
+        availableItems: 0,
+        unavailableItems: [],
+        allAvailable: true
+      };
+    }
+  }, [cart]);
+
+  // Handle navigation for non-customer users
   useEffect(() => {
     if (userType !== 'customer') {
       navigate('/customer/login');
-      return;
     }
-
-    // Calculate cart summary with stock validation
-    if (cart && cart.length > 0) {
-      try {
-        const summary = calculateCartSummary(cart);
-        setCartSummary(summary);
-      } catch (error) {
-        console.error('Error calculating cart summary:', error);
-        // Set a default summary to prevent crashes
-        setCartSummary({
-          subtotal: 0,
-          shippingCost: 100,
-          tax: 0,
-          total: 100,
-          totalItems: 0,
-          availableItems: 0,
-          unavailableItems: [],
-          allAvailable: true
-        });
-      }
-    } else {
-      setCartSummary(null);
-    }
-  }, [cart, cartLastUpdated, userType, navigate]);
+  }, [userType, navigate]);
 
   const handleRemoveItem = async (itemId, productName) => {
     // Show confirmation dialog
@@ -166,14 +165,14 @@ const Cart = () => {
             </div>
           )}
           
-          <div className="cart-items" key={`${cartLastUpdated}-${cart?.length}`}>
+          <div className="cart-items">
             {cart.map((item) => {
               // Handle missing availability property - assume available for MVP
               const isAvailable = item.availability ? item.availability.available !== false : true;
               const stockMessage = item.availability && item.availability.available === false ? getStockMessage(item.availability) : null;
               
               return (
-                <div key={`${item._id}-${cartLastUpdated}`} className={`cart-item ${!isAvailable ? 'unavailable' : ''}`}>
+                <div key={item._id} className={`cart-item ${!isAvailable ? 'unavailable' : ''}`}>
                   <div className="item-image">
                     {item.product.images && item.product.images.length > 0 ? (
                       <img 
