@@ -177,6 +177,41 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const loginWithOAuth = async (userData, token, type = 'customer') => {
+    try {
+      console.log('🔐 OAuth login:', { userData, token: !!token, type });
+      
+      if (!token || !userData) {
+        return { 
+          success: false, 
+          message: 'Missing token or user data' 
+        };
+      }
+      
+      const tokenKey = type === 'artisan' ? 'artisan_token' : 'customer_token';
+      const userKey = type === 'artisan' ? 'artisan_user' : 'customer_user';
+      
+      localStorage.setItem(tokenKey, token);
+      localStorage.setItem(userKey, JSON.stringify(userData));
+      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      setUser(userData);
+      setUserType(type);
+      
+      // Load cart if customer
+      if (type === 'customer') {
+        loadCart();
+      }
+      
+      return { success: true, user: userData };
+    } catch (error) {
+      console.error('❌ OAuth login error:', error);
+      return { 
+        success: false, 
+        message: 'OAuth login failed' 
+      };
+    }
+  };
+
   const logout = () => {
     localStorage.removeItem('artisan_token');
     localStorage.removeItem('artisan_user');
@@ -332,6 +367,7 @@ export const AuthProvider = ({ children }) => {
     user,
     userType,
     login,
+    loginWithOAuth,
     register,
     logout,
     loading,

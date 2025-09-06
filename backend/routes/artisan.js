@@ -10,7 +10,11 @@ const verifyArtisanToken = (req, res, next) => {
   const token = req.header('Authorization')?.replace('Bearer ', '');
   
   if (!token) {
-    return res.status(401).json({ message: 'Access denied. No token provided.' });
+    return res.status(401).json({ 
+      success: false,
+      message: 'Access denied. No token provided.',
+      errorType: 'NO_TOKEN'
+    });
   }
 
   try {
@@ -19,13 +23,43 @@ const verifyArtisanToken = (req, res, next) => {
     
     // Check if it's an artisan token
     if (decoded.type !== 'artisan' && decoded.userType !== 'artisan') {
-      return res.status(403).json({ message: 'Access denied. Artisan token required.' });
+      console.log('🚫 Access denied - User token used for artisan endpoint:', {
+        tokenType: decoded.type || decoded.userType,
+        email: decoded.email,
+        endpoint: req.originalUrl
+      });
+      return res.status(403).json({ 
+        success: false,
+        message: 'Access denied. This endpoint requires artisan login. Please log in as an artisan to continue.',
+        errorType: 'WRONG_USER_TYPE',
+        userType: decoded.type || decoded.userType,
+        requiredType: 'artisan'
+      });
     }
     
     req.artisan = decoded;
     next();
   } catch (error) {
-    res.status(400).json({ message: 'Invalid token.' });
+    console.error('🔴 Token verification failed:', error.message);
+    if (error.name === 'JsonWebTokenError') {
+      return res.status(401).json({ 
+        success: false,
+        message: 'Invalid token format.',
+        errorType: 'INVALID_TOKEN'
+      });
+    } else if (error.name === 'TokenExpiredError') {
+      return res.status(401).json({ 
+        success: false,
+        message: 'Token has expired. Please log in again.',
+        errorType: 'TOKEN_EXPIRED'
+      });
+    }
+    
+    res.status(400).json({ 
+      success: false,
+      message: 'Token verification failed.',
+      errorType: 'TOKEN_ERROR'
+    });
   }
 };
 

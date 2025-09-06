@@ -21,8 +21,23 @@ const artisanSchema = new mongoose.Schema({
   },
   password: {
     type: String,
-    required: true,
+    required: function() {
+      return !this.googleId; // Password not required if using Google OAuth
+    },
     minlength: 6
+  },
+  // Google OAuth fields
+  googleId: {
+    type: String,
+    sparse: true // Allow null values but enforce uniqueness when present
+  },
+  authProvider: {
+    type: String,
+    enum: ['local', 'google'],
+    default: 'local'
+  },
+  picture: {
+    type: String // Google profile picture URL
   },
   phone: {
     type: String,
@@ -77,5 +92,8 @@ const artisanSchema = new mongoose.Schema({
 }, {
   timestamps: true
 });
+
+// Create index for Google OAuth artisans
+artisanSchema.index({ googleId: 1 }, { unique: true, sparse: true });
 
 module.exports = mongoose.model('Artisan', artisanSchema);

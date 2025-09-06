@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 const OAuthCallbackHandler = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { login } = useAuth();
+  const { loginWithOAuth } = useAuth();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -16,6 +16,9 @@ const OAuthCallbackHandler = () => {
         const urlParams = new URLSearchParams(location.search);
         const token = urlParams.get('token');
         const provider = urlParams.get('provider');
+        const userType = urlParams.get('user_type');
+        const message = urlParams.get('message');
+        const isNewUser = urlParams.get('new_user') === 'true';
         const error = urlParams.get('error');
 
         if (error) {
@@ -44,9 +47,9 @@ const OAuthCallbackHandler = () => {
           if (response.ok) {
             const { user } = await response.json();
             
-            // Update auth context
-            if (login) {
-              await login(user, token, user.authProvider === 'google' ? 'user' : 'user');
+            // Update auth context using OAuth login
+            if (loginWithOAuth) {
+              await loginWithOAuth(user, token, 'customer');
             }
             
             // Check if profile needs completion
@@ -54,17 +57,16 @@ const OAuthCallbackHandler = () => {
               toast.info('Please complete your profile to continue');
               navigate('/complete-profile');
             } else {
-              toast.success('Welcome back! Successfully signed in with Google');
-              
-              // Determine redirect based on stored user type preference or user data
-              const userType = localStorage.getItem('googleAuthUserType') || 'user';
-              localStorage.removeItem('googleAuthUserType'); // Clean up
-              
-              if (userType === 'artisan' || user.userType === 'artisan') {
-                navigate('/dashboard');
+              // Show success message
+              if (message) {
+                toast.success(decodeURIComponent(message));
               } else {
-                navigate('/marketplace');
+                toast.success(isNewUser ? 'Welcome to Artisan Marketplace!' : 'Welcome back!');
               }
+              
+              // Google OAuth users are regular users, not artisans
+              // Always redirect to marketplace for now
+              navigate('/marketplace');
             }
           } else {
             throw new Error('Failed to fetch user profile');
@@ -89,7 +91,7 @@ const OAuthCallbackHandler = () => {
     };
 
     handleOAuthCallback();
-  }, [location, navigate, login]);
+  }, [location, navigate, loginWithOAuth]);
 
   const getErrorMessage = (errorCode) => {
     const errorMessages = {

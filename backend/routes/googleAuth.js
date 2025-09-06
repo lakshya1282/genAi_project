@@ -1,6 +1,8 @@
 const express = require('express');
 const { passport, generateJWTToken } = require('../config/passport');
 const auth = require('../middleware/auth');
+const User = require('../models/User');
+const bcrypt = require('bcryptjs');
 
 const router = express.Router();
 
@@ -9,8 +11,42 @@ const isGoogleOAuthConfigured = () => {
   return process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET;
 };
 
-// @route   GET /api/auth/google
-// @desc    Start Google OAuth flow
+// @route   GET /api/auth/google/signup
+// @desc    Start Google OAuth signup flow
+// @access  Public
+router.get('/google/signup', (req, res, next) => {
+  if (!isGoogleOAuthConfigured()) {
+    return res.status(500).json({
+      success: false,
+      message: 'Google OAuth not configured. Please set GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET environment variables.'
+    });
+  }
+  
+  passport.authenticate('google', { 
+    scope: ['profile', 'email'],
+    state: 'signup' // Pass signup context
+  })(req, res, next);
+});
+
+// @route   GET /api/auth/google/login
+// @desc    Start Google OAuth login flow
+// @access  Public
+router.get('/google/login', (req, res, next) => {
+  if (!isGoogleOAuthConfigured()) {
+    return res.status(500).json({
+      success: false,
+      message: 'Google OAuth not configured. Please set GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET environment variables.'
+    });
+  }
+  
+  passport.authenticate('google', { 
+    scope: ['profile', 'email'],
+    state: 'login' // Pass login context
+  })(req, res, next);
+});
+
+// @route   GET /api/auth/google (legacy - defaults to login)
+// @desc    Start Google OAuth flow (legacy support)
 // @access  Public
 router.get('/google', (req, res, next) => {
   if (!isGoogleOAuthConfigured()) {
@@ -21,7 +57,8 @@ router.get('/google', (req, res, next) => {
   }
   
   passport.authenticate('google', { 
-    scope: ['profile', 'email'] 
+    scope: ['profile', 'email'],
+    state: 'login' // Default to login for legacy route
   })(req, res, next);
 });
 
@@ -35,40 +72,94 @@ router.get('/google/callback', (req, res, next) => {
   }
   
   passport.authenticate('google', { 
-    failureRedirect: `${process.env.CLIENT_URL || process.env.FRONTEND_URL || 'http://localhost:3000'}/login?error=google_auth_failed`,
     session: false // We'll use JWT instead of sessions for API consistency
+  }, (err, user, info) => {
+    // Custom callback to handle different error types
+    if (err) {
+      console.error('🚫 Google OAuth error:', err.message);
+      const clientURL = process.env.CLIENT_URL || process.env.FRONTEND_URL || 'http://localhost:3000';
+      
+      if (err.message === 'EXISTING_EMAIL') {
+        // Email already exists - redirect with specific error
+        const errorURL = `${clientURL}/login?error=existing_email&message=${encodeURIComponent(err.userMessage)}&provider=${err.existingProvider || 'unknown'}`;
+        console.log('➡️ Redirecting with existing email error:', errorURL);
+        return res.redirect(errorURL);
+      } else if (err.message === 'USER_NOT_FOUND') {
+        // User not found during login - redirect to signup
+        const errorURL = `${clientURL}/signup?error=user_not_found&message=${encodeURIComponent(err.userMessage)}`;
+        console.log('➡️ Redirecting with user not found error:', errorURL);
+        return res.redirect(errorURL);
+      } else {
+        // Generic OAuth error
+        const errorURL = `${clientURL}/login?error=google_auth_failed&message=${encodeURIComponent('Authentication failed. Please try again.')}`;
+        console.log('➡️ Redirecting with generic error:', errorURL);
+        return res.redirect(errorURL);
+      }
+    }
+    
+    if (!user) {
+      // No user returned (shouldn't happen with our logic, but just in case)
+      const clientURL = process.env.CLIENT_URL || process.env.FRONTEND_URL || 'http://localhost:3000';
+      const errorURL = `${clientURL}/login?error=auth_failed&message=${encodeURIComponent('Authentication failed. Please try again.')}`;
+      console.log('➡️ Redirecting - no user returned:', errorURL);
+      return res.redirect(errorURL);
+    }
+    
+    // Success - attach user to request and continue
+    req.user = user;
+    next();
   })(req, res, next);
 }, 
   (req, res) => {
     try {
-      console.log('🔑 Google OAuth callback - User authenticated:', {
+      const isNewUser = req.user.createdAt && (Date.now() - new Date(req.user.createdAt).getTime()) < 5000; // Created within last 5 seconds
+      const userType = req.user.userType || (req.user.craftType !== undefined ? 'artisan' : 'user');
+      
+      console.log(`🔑 Google OAuth callback - ${userType} authenticated:`, {
         id: req.user._id,
         email: req.user.email,
         authProvider: req.user.authProvider,
-        hasPhone: !!req.user.phone
+        userType: userType,
+        hasPhone: !!req.user.phone,
+        hasCraftType: userType === 'artisan' ? !!req.user.craftType : 'N/A',
+        isNewUser: isNewUser
       });
       
       // Generate JWT token
       const token = generateJWTToken(req.user);
-      console.log('🎫 JWT token generated for user:', req.user.email);
+      console.log(`🎫 JWT token generated for ${userType}:`, req.user.email);
       
       // Determine redirect URL based on environment
       const clientURL = process.env.CLIENT_URL || process.env.FRONTEND_URL || 'http://localhost:3000';
       console.log('🔗 Client URL for redirect:', clientURL);
       
-      // Check if user needs to complete profile (missing phone number)
-      const needsProfile = !req.user.phone || req.user.phone === '';
-      console.log('📝 Profile completion needed:', needsProfile);
+      // Check if user/artisan needs to complete profile
+      let needsProfile;
+      if (userType === 'artisan') {
+        needsProfile = !req.user.phone || !req.user.craftType;
+      } else {
+        needsProfile = !req.user.phone;
+      }
+      console.log(`📝 Profile completion needed for ${userType}:`, needsProfile);
       
       if (needsProfile) {
         // Redirect to profile completion page with token
-        const redirectURL = `${clientURL}/complete-profile?token=${token}&provider=google`;
-        console.log('➡️ Redirecting to profile completion:', redirectURL);
+        const message = isNewUser ? `Welcome! Please complete your ${userType} profile.` : `Please complete your ${userType} profile.`;
+        const baseURL = userType === 'artisan' ? '/artisan/complete-profile' : '/complete-profile';
+        const redirectURL = `${clientURL}${baseURL}?token=${token}&provider=google&message=${encodeURIComponent(message)}&new_user=${isNewUser}&user_type=${userType}`;
+        console.log(`➡️ Redirecting ${userType} to profile completion:`, redirectURL);
         res.redirect(redirectURL);
       } else {
-        // Redirect to dashboard with token
-        const redirectURL = `${clientURL}/dashboard?token=${token}&provider=google`;
-        console.log('➡️ Redirecting to dashboard:', redirectURL);
+        // Profile is complete - redirect to appropriate dashboard
+        const message = isNewUser ? 'Welcome to Artisan Marketplace!' : 'Welcome back!';
+        let baseURL;
+        if (userType === 'artisan') {
+          baseURL = '/artisan/dashboard';
+        } else {
+          baseURL = '/oauth/callback'; // Regular user callback handler
+        }
+        const redirectURL = `${clientURL}${baseURL}?token=${token}&provider=google&message=${encodeURIComponent(message)}&new_user=${isNewUser}&user_type=${userType}`;
+        console.log(`➡️ Redirecting ${userType} to dashboard:`, redirectURL);
         res.redirect(redirectURL);
       }
       
@@ -80,7 +171,7 @@ router.get('/google/callback', (req, res, next) => {
       });
       
       const clientURL = process.env.CLIENT_URL || process.env.FRONTEND_URL || 'http://localhost:3000';
-      const errorURL = `${clientURL}/login?error=auth_callback_failed&message=${encodeURIComponent(error.message)}`;
+      const errorURL = `${clientURL}/login?error=auth_callback_failed`;
       console.log('➡️ Redirecting to login with error:', errorURL);
       res.redirect(errorURL);
     }
@@ -98,7 +189,7 @@ router.get('/google/profile', auth, async (req, res) => {
     res.json({
       success: true,
       user: {
-        id: user.userId,
+        id: user.userId || user.id,
         name: user.name,
         email: user.email,
         picture: user.picture || user.profileImage,
@@ -136,7 +227,6 @@ router.post('/google/complete-profile', auth, async (req, res) => {
     }
     
     // Update user profile
-    const User = require('../models/User');
     const updatedUser = await User.findByIdAndUpdate(
       req.user.userId,
       {
@@ -191,8 +281,7 @@ router.post('/google/unlink', auth, async (req, res) => {
       });
     }
     
-    const User = require('../models/User');
-    const bcrypt = require('bcryptjs');
+    // Hash the new password
     
     // Hash the new password
     const saltRounds = 10;

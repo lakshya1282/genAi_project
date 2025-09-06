@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useTranslation } from 'react-i18next';
 import { FaHome, FaUser, FaBox, FaChartBar, FaCog, FaSignOutAlt } from 'react-icons/fa';
@@ -11,7 +11,8 @@ import { useLogoutConfirmation } from '../hooks/useLogoutConfirmation';
 import './ArtisanDashboard.css';
 
 const ArtisanDashboard = () => {
-  const { artisanToken } = useAuth();
+  const navigate = useNavigate();
+  const { artisanToken, isAuthenticated, userType } = useAuth();
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -24,6 +25,25 @@ const ArtisanDashboard = () => {
   const { showLogoutModal, requestLogout, confirmLogout, cancelLogout } = useLogoutConfirmation();
 
   useEffect(() => {
+    // Check authentication first
+    if (!isAuthenticated) {
+      console.log('🔴 Not authenticated, redirecting to login');
+      navigate('/login');
+      return;
+    }
+    
+    if (userType !== 'artisan') {
+      console.log('👤 User is not an artisan, redirecting to marketplace');
+      navigate('/marketplace?message=' + encodeURIComponent('Access to artisan dashboard requires artisan login'));
+      return;
+    }
+    
+    if (!artisanToken) {
+      console.log('🔑 No artisan token, redirecting to login');
+      navigate('/login');
+      return;
+    }
+    
     fetchDashboardData();
     fetchOrders();
     
@@ -32,7 +52,7 @@ const ArtisanDashboard = () => {
     if (tabParam && ['dashboard', 'profile', 'products', 'analytics', 'settings'].includes(tabParam)) {
       setActiveTab(tabParam);
     }
-  }, [searchParams]);
+  }, [searchParams, isAuthenticated, userType, artisanToken, navigate]);
 
   const fetchDashboardData = async () => {
     try {
@@ -45,10 +65,21 @@ const ArtisanDashboard = () => {
       if (response.ok) {
         const data = await response.json();
         setDashboardData(data.dashboard);
+      } else if (response.status === 401 || response.status === 403) {
+        const errorData = await response.json().catch(() => ({}));
+        console.log('🚫 Unauthorized access to artisan dashboard:', errorData);
+        
+        if (errorData.errorType === 'WRONG_USER_TYPE') {
+          navigate('/marketplace?message=' + encodeURIComponent('You are logged in as a customer. Artisan dashboard requires artisan login.'));
+        } else {
+          navigate('/login?message=' + encodeURIComponent(errorData.message || 'Authentication required'));
+        }
+        return;
       } else {
         setError('Failed to fetch dashboard data');
       }
     } catch (error) {
+      console.error('Dashboard fetch error:', error);
       setError('Error fetching dashboard data');
     }
   };
@@ -64,10 +95,21 @@ const ArtisanDashboard = () => {
       if (response.ok) {
         const data = await response.json();
         setOrders(data.orders);
+      } else if (response.status === 401 || response.status === 403) {
+        const errorData = await response.json().catch(() => ({}));
+        console.log('🚫 Unauthorized access to artisan orders:', errorData);
+        
+        if (errorData.errorType === 'WRONG_USER_TYPE') {
+          navigate('/marketplace?message=' + encodeURIComponent('Orders view requires artisan login. You are currently logged in as a customer.'));
+        } else {
+          navigate('/login?message=' + encodeURIComponent(errorData.message || 'Authentication required'));
+        }
+        return;
       } else {
         setError('Failed to fetch orders');
       }
     } catch (error) {
+      console.error('Orders fetch error:', error);
       setError('Error fetching orders');
     } finally {
       setLoading(false);
