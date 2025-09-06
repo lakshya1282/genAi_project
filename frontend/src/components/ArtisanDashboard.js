@@ -6,10 +6,12 @@ import { FaHome, FaUser, FaBox, FaChartBar, FaCog, FaSignOutAlt } from 'react-ic
 import ArtisanProfile from './ArtisanProfile';
 import ProductManagement from './ProductManagement';
 import AnalyticsDashboard from './AnalyticsDashboard';
+import LogoutConfirmationModal from './LogoutConfirmationModal';
+import { useLogoutConfirmation } from '../hooks/useLogoutConfirmation';
 import './ArtisanDashboard.css';
 
 const ArtisanDashboard = () => {
-  const { artisanToken, logout } = useAuth();
+  const { artisanToken } = useAuth();
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -19,6 +21,7 @@ const ArtisanDashboard = () => {
   const [error, setError] = useState('');
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [statusUpdate, setStatusUpdate] = useState({ status: '', note: '' });
+  const { showLogoutModal, requestLogout, confirmLogout, cancelLogout } = useLogoutConfirmation();
 
   useEffect(() => {
     fetchDashboardData();
@@ -149,7 +152,7 @@ const ArtisanDashboard = () => {
   ];
 
   const handleLogout = () => {
-    logout();
+    requestLogout();
   };
 
   const renderContent = () => {
@@ -357,6 +360,13 @@ const ArtisanDashboard = () => {
           </div>
         </div>
       )}
+      
+      {/* Logout Confirmation Modal */}
+      <LogoutConfirmationModal
+        isOpen={showLogoutModal}
+        onConfirm={confirmLogout}
+        onCancel={cancelLogout}
+      />
     </div>
   );
 };

@@ -7,6 +7,12 @@
     "login": "લોગિન",
     "logout": "લૉગઆઉટ"
   },
+  "logoutConfirmation": {
+    "title": "લૉગઆઉટની પુષ્ટિ કરો",
+    "message": "આ ડિવાઇસમાંથી લૉગઆઉટ કરવાની પુષ્ટિ કરો?",
+    "confirm": "લૉગઆઉટ",
+    "cancel": "રદ કરો"
+  },
   "customerSettings": {
     "title": "ગ્રાહક સેટિંગ્સ",
     "language": "ભાષા",

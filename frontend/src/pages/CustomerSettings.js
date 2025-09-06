@@ -12,14 +12,17 @@ import RecentlyViewed from '../components/RecentlyViewed';
 import LanguageSelector from '../components/LanguageSelector';
 import AccountSettings from '../components/AccountSettings';
 import MyActivity from '../components/MyActivity';
+import LogoutConfirmationModal from '../components/LogoutConfirmationModal';
+import { useLogoutConfirmation } from '../hooks/useLogoutConfirmation';
 import './CustomerSettings.css';
 
 const CustomerSettings = () => {
   const { t } = useTranslation();
-  const { user, logout } = useAuth();
+  const { user } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
   const [activeSection, setActiveSection] = useState('profile');
+  const { showLogoutModal, requestLogout, confirmLogout, cancelLogout } = useLogoutConfirmation();
 
   // Map URL paths to section IDs
   const urlToSection = {
@@ -37,8 +40,7 @@ const CustomerSettings = () => {
   }, [location.pathname]);
 
   const handleLogout = () => {
-    logout();
-    window.location.href = '/';
+    requestLogout();
   };
 
   const settingsSections = [
@@ -235,6 +237,13 @@ const CustomerSettings = () => {
           </main>
         </div>
       </div>
+      
+      {/* Logout Confirmation Modal */}
+      <LogoutConfirmationModal
+        isOpen={showLogoutModal}
+        onConfirm={confirmLogout}
+        onCancel={cancelLogout}
+      />
     </div>
   );
 };

@@ -1,16 +1,18 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext';
 import { FaUser, FaChevronDown, FaCog, FaShoppingBag, FaHeart, FaTicketAlt, FaQuestionCircle, FaSignOutAlt, FaUserCircle, FaTachometerAlt, FaBell, FaRobot, FaChartBar, FaBox } from 'react-icons/fa';
+import LogoutConfirmationModal from './LogoutConfirmationModal';
+import { useLogoutConfirmation } from '../hooks/useLogoutConfirmation';
 import './AccountButton.css';
 
 const AccountButton = () => {
   const { t } = useTranslation();
-  const { user, logout, userType } = useAuth();
-  const navigate = useNavigate();
+  const { user, userType } = useAuth();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
+  const { showLogoutModal, requestLogout, confirmLogout, cancelLogout } = useLogoutConfirmation();
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -26,9 +28,8 @@ const AccountButton = () => {
   }, []);
 
   const handleLogout = () => {
-    logout();
-    navigate('/');
     setIsDropdownOpen(false);
+    requestLogout();
   };
 
   const closeDropdown = () => {
@@ -129,6 +130,12 @@ const AccountButton = () => {
             </div>
           </div>
         )}
+        
+        <LogoutConfirmationModal
+          isOpen={showLogoutModal}
+          onConfirm={confirmLogout}
+          onCancel={cancelLogout}
+        />
       </div>
     );
   }
@@ -195,6 +202,12 @@ const AccountButton = () => {
           </div>
         </div>
       )}
+      
+      <LogoutConfirmationModal
+        isOpen={showLogoutModal}
+        onConfirm={confirmLogout}
+        onCancel={cancelLogout}
+      />
     </div>
   );
 };

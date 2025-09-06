@@ -165,6 +165,12 @@
     "noImage": "No Image",
     "removeItem": "Remove item"
   },
+  "logoutConfirmation": {
+    "title": "Confirm Logout",
+    "message": "Confirm log out from this device?",
+    "confirm": "Log Out",
+    "cancel": "Cancel"
+  },
   "customerSettings": {
     "title": "Account Settings",
     "description": "Manage your account preferences and settings",
