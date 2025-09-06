@@ -8,6 +8,7 @@ import { FaPlus, FaMinus } from 'react-icons/fa';
 import { FiShield, FiTruck, FiRotateCcw } from 'react-icons/fi';
 import ReviewForm from '../components/ReviewForm';
 import StarRating from '../components/StarRating';
+import WishlistToggle from '../components/WishlistToggle';
 import './ProductDetail.css';
 
 const ProductDetail = () => {
@@ -35,45 +36,87 @@ const ProductDetail = () => {
       setProduct(response.data);
     } catch (error) {
       console.error('Error fetching product:', error);
-      // Use sample data for demo  
-      // Generate a consistent ObjectId for the sample product
-      const sampleProductId = '507f1f77bcf86cd799439011'; // Valid ObjectId for demo
-      const sampleProduct = {
-        _id: sampleProductId,
-        name: 'Traditional Blue Pottery Vase',
-        description: 'Beautiful handcrafted vase with traditional Jaipur blue pottery design featuring intricate floral patterns',
-        aiEnhancedDescription: 'This exquisite handcrafted pottery piece embodies centuries of traditional Indian craftsmanship. Each curve and glaze tells a story of dedication, skill passed down through generations. Made with locally sourced clay and traditional firing techniques, this masterpiece represents the rich cultural heritage of Jaipur\'s pottery artisans. The deep blue color is achieved through natural mineral pigments, and the intricate floral patterns are hand-painted with precision that comes only from years of practice.',
-        price: 1250,
-        category: 'Pottery',
-        images: ['https://via.placeholder.com/500x500/4A90E2/FFFFFF?text=Blue+Pottery+Vase'],
-        artisan: {
-          _id: 'sample-artisan',
-          name: 'Rajesh Kumar',
-          location: { city: 'Jaipur', state: 'Rajasthan' },
-          craftType: 'Pottery',
-          story: 'Meet Rajesh Kumar, a passionate pottery artisan from Jaipur with over 15 years of experience. Growing up in a family of craftspeople, he learned the intricate techniques of blue pottery passed down through generations. Rajesh sources his clay from the Alwar region and uses traditional Persian techniques brought to India centuries ago. His workshop in the old city of Jaipur is where magic happens - each piece is individually crafted, painted, and fired with the utmost care.',
-          rating: 4.8
-        },
-        materials: ['Premium Clay from Alwar', 'Natural Cobalt Blue Pigments', 'Traditional Lead-Free Glazes', 'Gold Accents'],
-        dimensions: { length: 15, width: 15, height: 25 },
-        craftingTime: '2 weeks (including drying time)',
-        features: [
-          'Handcrafted with Traditional Techniques',
-          '100% Natural Materials Used',
-          'Lead-Free Food Safe Glazes',
-          'Unique Artisan Signature Design',
-          'Dishwasher Safe (Hand wash recommended)'
-        ],
-        views: 124,
-        likes: 28,
-        stock: 6,
-        isAvailable: true,
-        tags: ['handmade', 'pottery', 'traditional', 'jaipur', 'blue-pottery', 'home-decor'],
-        marketingContent: {
-          socialMediaPost: '🎨 Discover authentic Jaipur Blue Pottery! ✨ Handcrafted Traditional Vase - where ancient Persian techniques meet Indian artistry. Perfect for your home! #HandmadeIndia #JaipurPottery',
-          targetAudience: 'Home decor enthusiasts, art collectors, cultural heritage lovers, mindful consumers'
-        }
-      };
+      // Use sample data for demo based on the ID
+      let sampleProduct;
+      
+      if (id === '68b9e5f1e2695ca11c71b3df') {
+        // This is the "Gold Plated Ring" from your screenshot
+        sampleProduct = {
+          _id: id,
+          name: 'Gold Plated Ring',
+          description: 'Beautiful handcrafted gold plated ring with intricate designs',
+          aiEnhancedDescription: 'A stunning gold plated ring that embodies traditional craftsmanship with modern elegance.',
+          price: 500,
+          category: 'Jewelry',
+          images: ['https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=500&h=500&fit=crop'],
+          artisan: {
+            _id: 'sample-artisan-jewelry',
+            name: 'Priya Sharma',
+            location: { city: 'Jaipur', state: 'Rajasthan' },
+            craftType: 'Jewelry',
+            story: 'Master jeweler with 20 years of experience in traditional Indian jewelry making.',
+            rating: 4.5
+          },
+          materials: ['Gold Plating', 'Brass Base', 'Traditional Polish'],
+          dimensions: { diameter: 2, thickness: 0.3, weight: 5 },
+          craftingTime: '1 week',
+          features: [
+            'Handcrafted Gold Plating',
+            'Traditional Designs',
+            'Adjustable Size',
+            'Tarnish Resistant'
+          ],
+          views: 89,
+          likes: 15,
+          stock: 0, // This product is out of stock
+          isAvailable: false,
+          tags: ['handmade', 'jewelry', 'gold-plated', 'traditional', 'ring'],
+          marketingContent: {
+            socialMediaPost: '✨ Handcrafted Gold Plated Ring - Traditional Indian jewelry at its finest! #HandmadeJewelry #GoldPlated',
+            targetAudience: 'Jewelry enthusiasts, traditional wear lovers, gift buyers'
+          }
+        };
+      } else {
+        // Default product with good stock
+        sampleProduct = {
+          _id: id,
+          name: 'Traditional Blue Pottery Vase',
+          description: 'Beautiful handcrafted vase with traditional Jaipur blue pottery design featuring intricate floral patterns',
+          aiEnhancedDescription: 'This exquisite handcrafted pottery piece embodies centuries of traditional Indian craftsmanship. Each curve and glaze tells a story of dedication, skill passed down through generations. Made with locally sourced clay and traditional firing techniques, this masterpiece represents the rich cultural heritage of Jaipur\'s pottery artisans. The deep blue color is achieved through natural mineral pigments, and the intricate floral patterns are hand-painted with precision that comes only from years of practice.',
+          price: 1250,
+          category: 'Pottery',
+          images: ['https://via.placeholder.com/500x500/4A90E2/FFFFFF?text=Blue+Pottery+Vase'],
+          artisan: {
+            _id: 'sample-artisan',
+            name: 'Rajesh Kumar',
+            location: { city: 'Jaipur', state: 'Rajasthan' },
+            craftType: 'Pottery',
+            story: 'Meet Rajesh Kumar, a passionate pottery artisan from Jaipur with over 15 years of experience. Growing up in a family of craftspeople, he learned the intricate techniques of blue pottery passed down through generations. Rajesh sources his clay from the Alwar region and uses traditional Persian techniques brought to India centuries ago. His workshop in the old city of Jaipur is where magic happens - each piece is individually crafted, painted, and fired with the utmost care.',
+            rating: 4.8
+          },
+          materials: ['Premium Clay from Alwar', 'Natural Cobalt Blue Pigments', 'Traditional Lead-Free Glazes', 'Gold Accents'],
+          dimensions: { length: 15, width: 15, height: 25 },
+          craftingTime: '2 weeks (including drying time)',
+          features: [
+            'Handcrafted with Traditional Techniques',
+            '100% Natural Materials Used',
+            'Lead-Free Food Safe Glazes',
+            'Unique Artisan Signature Design',
+            'Dishwasher Safe (Hand wash recommended)'
+          ],
+          views: 124,
+          likes: 28,
+          stock: 8,
+          isAvailable: true,
+          tags: ['handmade', 'pottery', 'traditional', 'jaipur', 'blue-pottery', 'home-decor'],
+          marketingContent: {
+            socialMediaPost: '🎨 Discover authentic Jaipur Blue Pottery! ✨ Handcrafted Traditional Vase - where ancient Persian techniques meet Indian artistry. Perfect for your home! #HandmadeIndia #JaipurPottery',
+            targetAudience: 'Home decor enthusiasts, art collectors, cultural heritage lovers, mindful consumers'
+          }
+        };
+      }
+      
+      console.log('Setting sample product:', sampleProduct.name, 'Stock:', sampleProduct.stock, 'Available:', sampleProduct.isAvailable);
       setProduct(sampleProduct);
     }
     setLoading(false);
@@ -152,29 +195,43 @@ const ProductDetail = () => {
 
   // Function to get stock status
   const getStockStatus = (product) => {
-    if (!product) return { status: 'in-stock', label: t('product.inStock'), class: 'in-stock' };
+    if (!product) {
+      console.log('No product data');
+      return { status: 'in-stock', label: t('product.inStock') || 'In Stock', class: 'in-stock' };
+    }
+    
+    console.log('Stock status check:', {
+      name: product.name,
+      stock: product.stock,
+      isAvailable: product.isAvailable
+    });
     
     // If product doesn't have stock information, assume it's available
     if (product.stock === undefined && product.isAvailable === undefined) {
-      return { status: 'in-stock', label: t('product.inStock'), class: 'in-stock' };
+      console.log('No stock info, defaulting to in-stock');
+      return { status: 'in-stock', label: t('product.inStock') || 'In Stock', class: 'in-stock' };
     }
     
     // If explicitly set as unavailable or stock is 0
     if (product.isAvailable === false || product.stock === 0) {
-      return { status: 'out-of-stock', label: t('product.outOfStock'), class: 'out-of-stock' };
+      console.log('Product out of stock');
+      return { status: 'out-of-stock', label: t('product.outOfStock') || 'Out of Stock', class: 'out-of-stock' };
     }
     
     // If stock is defined, use it for classification
     if (product.stock !== undefined) {
       if (product.stock <= 2) {
-        return { status: 'low-stock', label: t('product.lowStock'), class: 'low-stock' };
+        console.log('Low stock:', product.stock);
+        return { status: 'low-stock', label: t('product.lowStock') || 'Low Stock', class: 'low-stock' };
       } else if (product.stock <= 5) {
-        return { status: 'limited-stock', label: t('product.stockLimited'), class: 'limited-stock' };
+        console.log('Limited stock:', product.stock);
+        return { status: 'limited-stock', label: t('product.stockLimited') || 'Limited Stock', class: 'limited-stock' };
       }
     }
     
     // Default to in-stock for products without specific stock info
-    return { status: 'in-stock', label: t('product.inStock'), class: 'in-stock' };
+    console.log('Defaulting to in-stock');
+    return { status: 'in-stock', label: t('product.inStock') || 'In Stock', class: 'in-stock' };
   };
 
   if (loading) {
@@ -187,21 +244,45 @@ const ProductDetail = () => {
 
   const stockStatus = getStockStatus(product);
   
+  // Debug function to test different stock states
+  const debugStockChange = (newStock, newAvailable) => {
+    setProduct(prev => ({
+      ...prev,
+      stock: newStock,
+      isAvailable: newAvailable
+    }));
+  };
+  
   return (
     <div className={`modern-product-page ${stockStatus.class}`}>
+      {/* Debug Controls */}
+      <div style={{position: 'fixed', top: '10px', right: '10px', zIndex: 9999, background: 'white', padding: '10px', border: '1px solid #ccc', borderRadius: '5px', fontSize: '12px'}}>
+        <div><strong>Debug Stock Controls:</strong></div>
+        <div>Current: Stock={product?.stock}, Available={String(product?.isAvailable)}, Status={stockStatus.status}</div>
+        <button onClick={() => debugStockChange(0, false)} style={{margin: '2px', padding: '2px 5px', fontSize: '10px'}}>Out of Stock</button>
+        <button onClick={() => debugStockChange(2, true)} style={{margin: '2px', padding: '2px 5px', fontSize: '10px'}}>Low Stock</button>
+        <button onClick={() => debugStockChange(4, true)} style={{margin: '2px', padding: '2px 5px', fontSize: '10px'}}>Limited Stock</button>
+        <button onClick={() => debugStockChange(10, true)} style={{margin: '2px', padding: '2px 5px', fontSize: '10px'}}>In Stock</button>
+      </div>
       <div className="container">
         <div className="product-layout">
           <div className="product-image-section">
-            <div className="image-container">
+            <div className={`image-container ${stockStatus.status === 'out-of-stock' ? 'out-of-stock' : ''}`}>
+              <WishlistToggle productId={product._id} className="product-wishlist" />
               {product.discount && (
                 <div className="discount-badge">
                   {product.discount}% OFF
                 </div>
               )}
-              <img 
-                src={product.images?.[0] || 'https://via.placeholder.com/500x500?text=Handcraft'} 
+              <img
+                src={product.images?.[0] || 'https://via.placeholder.com/500x500/4A90E2/FFFFFF?text=Product+Image'} 
                 alt={product.name}
                 className="product-image"
+                onError={(e) => {
+                  e.target.src = 'https://via.placeholder.com/500x500/4A90E2/FFFFFF?text=Product+Image';
+                  console.log('Image failed to load, using fallback');
+                }}
+                onLoad={() => console.log('Product image loaded successfully')}
               />
               {stockStatus.status === 'out-of-stock' && (
                 <div className="out-of-stock-overlay">
@@ -212,6 +293,11 @@ const ProductDetail = () => {
           </div>
 
           <div className="product-info-section">
+            {/* Category Badge */}
+            {product.category && (
+              <span className="product-category">{product.category}</span>
+            )}
+            
             {/* Product Title */}
             <h1 className="product-title">
               {product.name}
